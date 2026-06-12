@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Detailed case study for Joshua Hodson's Local AI Agent Workspace project.">
+  <title>Local AI Workspace | Joshua Hodson</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Joshua Hodson home">
+      <span class="brand-mark">JH</span>
+      <span>Joshua Hodson</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="index.html#projects">Projects</a>
+      <a href="#files">Files</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+      <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+        <i data-lucide="sun"></i>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="detail-hero">
+      <div>
+        <a class="back-link" href="index.html#projects"><i data-lucide="arrow-left"></i> Back to projects</a>
+        <h1>Local AI Workspace</h1>
+        <p>
+          Building and optimizing a self-hosted, privacy-first AI development environment utilizing Odysseus, OpenClaw,
+          and Ollama to handle complex local repository manipulation.
+        </p>
+      </div>
+      <img src="assets/ai-workspace-dashboard-2.jpg" alt="Local AI Workspace operational interface dashboard">
+    </section>
+
+    <section class="detail-section">
+      <h2>Project Overview</h2>
+      <p>
+        A technical exploration into local-first AI engineering. The goal was to deploy, configure, and stress-test a
+        local AI agent ecosystem capable of autonomous file management, shell execution, and multi-step coding workflows
+        directly on local hardware without sending sensitive code to external cloud providers.
+      </p>
+      <p class="note" style="margin-top: 18px;">
+        <strong>Note:</strong> This project is currently in progress. As development continues, new architectural modifications, challenge breakdowns, and repository files will be updated here.
+      </p>
+    </section>
+
+    <section class="detail-section two-column media-left">
+      <div>
+        <figure class="photo-placeholder ratio-square" style="padding: 12px; display: flex; flex-direction: column;">
+          <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="max-height: 380px;">
+              <style>
+                .arch-node { fill: var(--surface); stroke: var(--line); stroke-width: 2; rx: 8px; }
+                .arch-node-accent { fill: var(--surface); stroke: var(--accent); stroke-width: 2.5; rx: 8px; }
+                .arch-text-title { fill: var(--ink); font-family: Inter, system-ui, sans-serif; font-size: 14px; font-weight: 800; text-anchor: middle; }
+                .arch-text-subtitle { fill: var(--muted); font-family: Inter, system-ui, sans-serif; font-size: 11px; font-weight: 500; text-anchor: middle; }
+                .arch-arrow { fill: none; stroke: var(--line); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+                .arch-marker { fill: var(--line); }
+                .arch-boundary { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 6 6; rx: 12px; }
+                .arch-boundary-text { fill: var(--muted); font-family: Inter, system-ui, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.8; }
+                .arch-icon { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+              </style>
+              
+              <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" class="arch-marker" />
+                </marker>
+              </defs>
+
+              <!-- Local Host Environment Boundary -->
+              <rect x="10" y="10" width="380" height="380" class="arch-boundary" />
+              <text x="25" y="32" class="arch-boundary-text">Local Host Environment</text>
+
+              <!-- Connections / Flows -->
+              <!-- Odysseus UI to OpenClaw Agent -->
+              <path d="M 200 95 L 200 135" class="arch-arrow" marker-end="url(#arrow)" />
+              
+              <!-- OpenClaw to MCP -->
+              <path d="M 160 215 L 115 265" class="arch-arrow" marker-end="url(#arrow)" />
+              
+              <!-- OpenClaw to Ollama -->
+              <path d="M 240 215 L 285 265" class="arch-arrow" marker-end="url(#arrow)" />
+
+              <!-- Nodes -->
+              
+              <!-- 1. Odysseus Workspace UI -->
+              <g>
+                <rect x="90" y="45" width="220" height="50" class="arch-node" />
+                <!-- Layout icon -->
+                <rect x="106" y="60" width="20" height="18" rx="2" class="arch-icon" stroke="var(--steel)" />
+                <line x1="106" y1="66" x2="126" y2="66" stroke="var(--steel)" stroke-width="1.5" />
+                <circle cx="111" cy="63" r="1" fill="var(--steel)" />
+                <circle cx="115" cy="63" r="1" fill="var(--steel)" />
+                <text x="212" y="69" class="arch-text-title">Odysseus Workspace</text>
+                <text x="212" y="83" class="arch-text-subtitle">Web UI & Control Plane</text>
+              </g>
+
+              <!-- 2. OpenClaw Agent (Core Orchestrator) -->
+              <g>
+                <rect x="75" y="145" width="250" height="70" class="arch-node-accent" />
+                <!-- Terminal icon -->
+                <rect x="92" y="169" width="24" height="20" rx="3" class="arch-icon" stroke="var(--accent)" />
+                <path d="M 98 176 l 3 3 l -3 3" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" />
+                <line x1="104" y1="182" x2="110" y2="182" stroke="var(--accent)" stroke-width="1.5" />
+                <text x="212" y="172" class="arch-text-title" style="fill: var(--accent-dark);">OpenClaw Agent</text>
+                <text x="212" y="188" class="arch-text-subtitle">Orchestration & Command Loop</text>
+                <text x="212" y="201" class="arch-text-subtitle" style="font-size: 9px; fill: var(--accent); font-weight: 700;">INSPECT → ACT → VERIFY → REPORT</text>
+              </g>
+
+              <!-- 3. Filesystem MCP Server -->
+              <g>
+                <rect x="25" y="275" width="155" height="70" class="arch-node" />
+                <!-- Shield/Database icon -->
+                <path d="M 38 290 h 8 l 3 3 h 12 a 2 2 0 0 1 2 2 v 12 a 2 2 0 0 1 -2 2 h -23 a 2 2 0 0 1 -2 -2 v -15 a 2 2 0 0 1 2 -2 z" class="arch-icon" stroke="var(--steel)" />
+                <text x="110" y="300" class="arch-text-title" style="font-size: 13px;">Filesystem MCP</text>
+                <text x="110" y="316" class="arch-text-subtitle">Tool-Calling Sandbox</text>
+                <text x="110" y="328" class="arch-text-subtitle" style="font-size: 9px; fill: var(--steel);">Restricted Workspace Root</text>
+              </g>
+
+              <!-- 4. Ollama Local LLM -->
+              <g>
+                <rect x="220" y="275" width="155" height="70" class="arch-node" />
+                <!-- CPU/Engine icon -->
+                <rect x="232" y="287" width="20" height="20" rx="3" class="arch-icon" stroke="var(--gold)" />
+                <line x1="242" y1="283" x2="242" y2="287" stroke="var(--gold)" stroke-width="1.5" />
+                <line x1="242" y1="307" x2="242" y2="311" stroke="var(--gold)" stroke-width="1.5" />
+                <line x1="228" y1="297" x2="232" y2="297" stroke="var(--gold)" stroke-width="1.5" />
+                <line x1="252" y1="297" x2="256" y2="297" stroke="var(--gold)" stroke-width="1.5" />
+                <text x="305" y="300" class="arch-text-title" style="font-size: 13px;">Ollama Engine</text>
+                <text x="305" y="316" class="arch-text-subtitle">Local LLM Inference</text>
+                <text x="305" y="328" class="arch-text-subtitle" style="font-size: 9px; fill: var(--gold);">VRAM-Aware Allocation</text>
+              </g>
+            </svg>
+          </div>
+          <figcaption>Local agent architecture control plane</figcaption>
+        </figure>
+      </div>
+      <div>
+        <h2>Architecture & Stack</h2>
+        <p>
+          This project focuses heavily on orchestration, tool-calling boundaries, and local inference models:
+        </p>
+        <p style="margin-top: 14px;">
+          <strong>Workspace Framework (Odysseus):</strong> Utilized the open-source Odysseus self-hosted workspace to
+          act as the primary operational control plane and agent environment.
+        </p>
+        <p style="margin-top: 14px;">
+          <strong>Local Inference Engine (Ollama):</strong> Ran open-weights LLMs entirely on local hardware via Ollama,
+          optimizing the setup to match VRAM capabilities using automated hardware-aware recommendation matrices.
+        </p>
+        <p style="margin-top: 14px;">
+          <strong>Agent Automation (OpenClaw Framework):</strong> Experimented with OpenClaw’s autonomous architecture
+          to evaluate secure, messaging-driven, and terminal-native execution layers.
+        </p>
+        <p style="margin-top: 14px;">
+          <strong>Interoperability Layer (MCP):</strong> Configured Filesystem MCP servers to expose restricted local
+          directories safely to the AI model's context window.
+        </p>
+      </div>
+    </section>
+
+    <section class="detail-section">
+      <h2>Engineering Challenges</h2>
+      <div class="photo-grid two">
+        <figure class="photo-placeholder ratio-4-3">
+          <img src="assets/ai-workspace-error.jpg" alt="MCP server outside allowed roots error boundary wall">
+          <figcaption>Challenge 1: MCP Directory Sandbox Wall</figcaption>
+        </figure>
+        <figure class="photo-placeholder ratio-4-3">
+          <img src="assets/ai-workspace-terminal.jpg" alt="Agent over-explanation terminal trace">
+          <figcaption>Challenge 2: Agent Token Overrun</figcaption>
+        </figure>
+      </div>
+
+      <h3 style="margin-top: 32px;">Challenge 1: The MCP Directory Sandbox Wall</h3>
+      <p>
+        <strong>The Problem:</strong> During deployment, the high-level Model Context Protocol (MCP) filesystem server
+        threw constant <code>outside the allowed roots</code> input validation errors when attempting to modify
+        repository index documents. The protocol's strict root-scoping limits blocked standard file-writing mechanisms
+        despite system admin permissions.
+      </p>
+      <p>
+        <strong>The Solution:</strong> Rather than relying on fragile abstracted JSON-editor tool schemas, a low-level
+        fallback pipeline was designed. By shifting file modification instructions exclusively to shell-based streaming
+        text manipulation (<code>exec_command</code> executing focused <code>sed</code>, <code>grep</code>, and
+        <code>cat</code> pipelines), the agent successfully bypassed protocol boundaries to update local documents
+        directly via the container terminal.
+      </p>
+
+      <h3 style="margin-top: 32px;">Challenge 2: Eliminating AI Assistant "Over-Explanation"</h3>
+      <p>
+        <strong>The Problem:</strong> Standard conversational system prompts caused the AI agent to engage in excessive
+        conversational chatter and try to "explain" code modifications instead of cleanly executing tool calls. This
+        clogged the token window and caused tool schema crashes due to string-formatting malformations.
+      </p>
+      <p>
+        <strong>The Solution:</strong> Authored and implemented a highly strict, non-interactive "Terminal Persona"
+        System Prompt. This prompt established a mandatory deterministic loop: <strong>Inspect &rarr; Act &rarr; Verify
+          &rarr; Report</strong>. It strictly forbade conversational pleasantries and mandated raw stdout/stderr
+        delivery, successfully training the local model to function purely as an execution-oriented lead developer.
+      </p>
+    </section>
+
+
+    <section class="detail-section reflection-files" id="files">
+      <div>
+        <h2>Reflection & Takeaways</h2>
+        <p>
+          <strong>System Over Abstraction:</strong> High-level abstractions and complex JSON-payload editing tools are
+          often less reliable than standard, low-level UNIX utilities (<code>sed</code>, <code>awk</code>,
+          <code>grep</code>) when driving autonomous software agents.
+        </p>
+        <p style="margin-top: 14px;">
+          <strong>Context Control:</strong> Explicitly mapping file bounds using targeted retrieval patterns is
+          mandatory for local workflows to prevent local hardware token constraints from degrading model performance.
+        </p>
+        <p style="margin-top: 14px;">
+          <strong>The Shift to AI-Native IDEs:</strong> The limitations encountered with containerized chat-agent
+          wrappers directly highlighted the architectural advantages of native, file-system-aware development
+          environments like Cursor.
+        </p>
+      </div>
+      <div class="resource-stack">
+        <a class="resource-link" href="https://github.com/OpenClaw/OpenClaw" target="_blank" rel="noreferrer">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A4.8 4.8 0 0 0 8 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+          OpenClaw Repository
+        </a>
+        <a class="resource-link" href="https://ollama.com" target="_blank" rel="noreferrer">
+          <i data-lucide="globe"></i>
+          Ollama Inference Engine
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer compact-footer">
+    <a href="mailto:jhodson@uwaterloo.ca"><i data-lucide="mail"></i> jhodson@uwaterloo.ca</a>
+    <a href="https://www.linkedin.com/in/jhodson/" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn</a>
+    <a href="https://github.com/jhodson06" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A4.8 4.8 0 0 0 8 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub</a>
+    <a href="Joshua%20Hodson%20Resume.pdf" target="_blank" rel="noreferrer"><i data-lucide="file-text"></i> Resume</a>
+  </footer>
+</body>
+
+</html>

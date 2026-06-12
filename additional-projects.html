@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="Joshua Hodson's additional engineering projects including mechanisms, vehicle turn systems, and custom 3D printing.">
+  <title>Additional Projects | Joshua Hodson</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Joshua Hodson home">
+      <span class="brand-mark">JH</span>
+      <span>Joshua Hodson</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="index.html#projects">Projects</a>
+      <a href="index.html#skills">Skills</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+      <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+        <i data-lucide="sun"></i>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="detail-section" style="max-width: 1280px; padding-top: 64px; padding-bottom: 64px;">
+      <a class="back-link" href="index.html#projects"><i data-lucide="arrow-left"></i> Back to projects</a>
+      <h1
+        style="font-size: clamp(3.5rem, 8vw, 6.5rem); line-height: 0.95; margin: 18px 0 24px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap;">
+        Additional Projects</h1>
+      <p style="font-size: clamp(1.05rem, 1.4vw, 1.35rem); max-width: 840px; line-height: 1.5; color: var(--muted);">
+        A collection of smaller builds, mechanism experiments, and hardware iterations that round out my physical
+        prototyping, troubleshooting, and design experience.
+      </p>
+    </section>
+
+    <!-- SECTION 1: FEATURED PROTOTYPING BUILDS -->
+    <section class="detail-section" style="border-bottom: 0; padding-bottom: 12px;">
+      <p class="section-kicker">Core Prototyping</p>
+      <h2 style="font-size: clamp(2rem, 3.5vw, 3.8rem);">Featured Prototyping Projects</h2>
+      <p>Larger, more complete systems involving design notebooks, custom wiring, structural fabrication, and target
+        testing.</p>
+    </section>
+
+    <section class="detail-section two-column media-left" id="projectile">
+      <div>
+        <div class="photo-row" style="display: flex; flex-direction: column; gap: 16px;">
+          <figure class="photo-placeholder ratio-4-3">
+            <img src="assets/ballista-prototype-1.jpg" alt="Projectile ballista launcher wooden structure prototype">
+            <figcaption>Projectile Ballista Launcher Prototype</figcaption>
+          </figure>
+          <figure class="photo-placeholder ratio-4-3">
+            <img src="assets/ballista-prototype-2.jpg" alt="Projectile ballista launcher wooden structure prototype">
+            <figcaption>Launcher Calibration / Setup</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div>
+        <p class="project-topline">Kinematics & Woodworking</p>
+        <h2>Projectile Ballista Launcher</h2>
+        <p>
+          This project was completed as part of a physics class challenge. The objective was to design and build a
+          tennis ball launcher that could accurately launch a projectile into a small target bucket at a specific
+          distance using only elastic potential and mechanical energy. The design was constrained to fit within a 1m x
+          1m x 1m space, utilizing readily available materials.
+        </p>
+        <p style="margin-top: 14px;">
+          We chose a ballista-style launcher, utilizing standard 2x4 lumber for the frame, a gate hook release trigger
+          mechanism, and adjustable peg slots along the crossbar to control the elastic band tension. For the elastic
+          component, we used an exercise band run through a PVC guide pipe to center and fire the tennis ball.
+        </p>
+        <p style="margin-top: 14px;">
+          During testing, we encountered challenges with firing distance degradation as the guiding tape wore away. We
+          resolved this by introducing a small PVC "scoop" to cradle the projectile. In the final target competition,
+          our ballista performed exceptionally well, consistently launching projectiles over 25 meters with high
+          structural stability.
+        </p>
+      </div>
+    </section>
+
+    <section class="detail-section two-column media-left" id="printer">
+      <div>
+        <div class="photo-row" style="display: flex; flex-direction: column; gap: 16px;">
+          <figure class="photo-placeholder ratio-4-3">
+            <img src="assets/3d-printer-extruder-assembly-1.jpg" alt="Customized 3D printer extruder and hot end routing assembly setup">
+            <figcaption>Old 3D printer motor and hotend</figcaption>
+          </figure>
+          <figure class="photo-placeholder ratio-4-3">
+            <img src="assets/3d-printer-extruder-assembly-2.jpg" alt="New extruder assembly and wiring calibration">
+            <figcaption>Motherboard and wiring</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div>
+        <p class="project-topline">Additive Manufacturing & Repair</p>
+        <h2>3D Printer Customization</h2>
+        <p>
+          I’ve owned a 3D printer for several years, and while I’ve had occasional minor issues, nothing major had
+          happened until the extruder/thermistor failed, rendering the printer unusable. After trying multiple fixes, I
+          decided to replace the extruder/hot end assembly entirely and upgraded to a new model.
+        </p>
+        <p style="margin-top: 14px;">
+          This process took quite a bit of time, as I had to combine some existing components with the new model and
+          rewire part of the motherboard. Unfortunately, some of the parts I received were broken, forcing me to
+          improvise by using old parts with the new ones. Despite the setbacks, I successfully resolved the issue and
+          got the printer back in working order.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 2: EXPERIMENTS & MINOR BUILDS -->
+    <section class="detail-section" style="border-bottom: 0; padding-bottom: 12px; margin-top: 32px;">
+      <p class="section-kicker">Experiments & Small Mechanisms</p>
+      <h2 style="font-size: clamp(2rem, 3.5vw, 3.8rem);">Short Studies & Incomplete Work</h2>
+      <p>A gallery of focused mechanism builds, steering prototypes, and velocity models.</p>
+    </section>
+
+    <section class="detail-section">
+      <div class="photo-grid two">
+
+        <figure class="photo-placeholder ratio-square" id="turret">
+          <img src="assets/turret-swivel.jpg" alt="Turret Swivel and Rotational Movement">
+          <figcaption>Turret Swivel and Rotational Movement</figcaption>
+        </figure>
+
+        <figure class="photo-placeholder ratio-square" id="vehicle">
+          <img src="assets/vehicle-turning-mechanism.jpg" alt="Vehicle Turning Mechanism">
+          <figcaption>Vehicle Turning Mechanism</figcaption>
+        </figure>
+
+        <figure class="photo-placeholder ratio-square" id="velocity">
+          <img src="assets/velocity-maximization.jpg" alt="Velocity Maximization Project">
+          <figcaption>Velocity Maximization Project</figcaption>
+        </figure>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer compact-footer">
+    <a href="mailto:jhodson@uwaterloo.ca"><i data-lucide="mail"></i> jhodson@uwaterloo.ca</a>
+    <a href="https://www.linkedin.com/in/jhodson/" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn</a>
+    <a href="https://github.com/jhodson06" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A4.8 4.8 0 0 0 8 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub</a>
+    <a href="Joshua%20Hodson%20Resume.pdf" target="_blank" rel="noreferrer"><i data-lucide="file-text"></i> Resume</a>
+  </footer>
+</body>
+
+</html>

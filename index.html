@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="Engineering portfolio for Joshua Hodson, featuring robotics, mechanical design, prototyping, controls, CAD, fabrication, and testing projects.">
+  <title>Joshua Hodson | Engineering Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Joshua Hodson home">
+      <span class="brand-mark">JH</span>
+      <span>Joshua Hodson</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="#projects">Projects</a>
+      <a href="#process">Process</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+      <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+        <i data-lucide="sun"></i>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" style="grid-template-columns: minmax(0, 0.8fr) minmax(320px, 0.8fr);">
+      <div class="hero-copy" style="max-width: 1000px;">
+        <p class="eyebrow" style="max-width: 1000px;">Mechanical design, robotics, controls, prototyping</p>
+        <h1 style="max-width: 1000px;">Designing systems that survive the test bench.</h1>
+        <p style="max-width: 920px;">
+          I am Joshua Hodson, a mechatronics engineering student at the University of Waterloo.
+          My projects focus on physical systems: robots, mechanisms,
+          fabrication, controls, and the messy problem-solving that happens between CAD
+          and a working prototype.
+        </p>
+        <div class="hero-actions" aria-label="Portfolio actions">
+          <a class="button primary" href="#projects">
+            <i data-lucide="folder-kanban"></i>
+            View Projects
+          </a>
+          <a class="button secondary" href="mailto:jhodson@uwaterloo.ca">
+            <i data-lucide="send"></i>
+            Contact Me
+          </a>
+        </div>
+      </div>
+      <div class="hero-media" aria-label="Hexapod robot close-up wiring assembly on the workbench">
+        <img src="assets/hexapod-close-up.jpg" alt="Hexapod robot close-up wiring assembly on the workbench">
+      </div>
+    </section>
+
+    <section class="section mission-statement" aria-label="Portfolio focus">
+      <div class="mission-grid">
+        <div class="mission-content">
+          <div class="mission-icon">
+            <i data-lucide="microscope" stroke-width="1.5"></i>
+          </div>
+          <h2>Process-oriented work, not just finished objects.</h2>
+          <p>
+            Each piece shows constraints, design decisions, failures, and
+            fixes. They focus on the iterative process and physical testing required to build robust systems.
+          </p>
+          <div class="mission-highlights">
+            <div class="highlight-item">
+              <i data-lucide="git-merge"></i>
+              <span>Design Decisions</span>
+            </div>
+            <div class="highlight-item">
+              <i data-lucide="wrench"></i>
+              <span>Failures & Fixes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission-content">
+          <div class="mission-icon">
+            <i data-lucide="brain-circuit" stroke-width="1.5"></i>
+          </div>
+          <h2>Framed as case studies for engineering judgment.</h2>
+          <p>
+            Each project is structured so recruiters and teams can quickly grasp the problem-solving methodology,
+            technical tradeoffs, and the engineering judgment behind the final build.
+          </p>
+          <div class="mission-highlights">
+            <div class="highlight-item">
+              <i data-lucide="scale"></i>
+              <span>Technical Tradeoffs</span>
+            </div>
+            <div class="highlight-item">
+              <i data-lucide="target"></i>
+              <span>Problem Solving</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission-content">
+          <div class="mission-icon">
+            <i data-lucide="cpu" stroke-width="1.5"></i>
+          </div>
+          <h2>End-to-end systems integration.</h2>
+          <p>
+            Moving beyond isolated components to design mechanisms, electronics, and controls that work together
+            reliably in the physical world.
+          </p>
+          <div class="mission-highlights">
+            <div class="highlight-item">
+              <i data-lucide="zap"></i>
+              <span>Mechatronics</span>
+            </div>
+            <div class="highlight-item">
+              <i data-lucide="hammer"></i>
+              <span>Prototyping</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="section-heading">
+        <p class="section-kicker">Selected work</p>
+        <h2>Major Projects</h2>
+      </div>
+
+      <article class="project feature">
+        <a class="project-image" href="hexapod-project.html" aria-label="Open Hexapod Project detail page">
+          <img src="assets/hexapod-wiring-assembly-1.jpg" alt="Hexapod robot close-up wiring assembly on the workbench">
+        </a>
+        <div class="project-body">
+          <div class="project-topline">
+            <span>Robotics</span>
+            <span>Redesign, wiring, code, test</span>
+          </div>
+          <h3><a href="hexapod-project.html">Hexapod Robot</a></h3>
+          <p>
+            Continued a previous student's hexapod and rebuilt much of the system:
+            redesigned and reprinted parts, rewired electronics, modified control code,
+            and tested the robot through repeated mechanical failures.
+          </p>
+          <ul class="tag-list" aria-label="Hexapod skills">
+            <li>Servo control</li>
+            <li>3D printing</li>
+            <li>Mechanical debugging</li>
+            <li>PS2 controller input</li>
+          </ul>
+          <div class="project-links">
+            <a href="https://www.youtube.com/watch?v=I_p68kZYekw" target="_blank" rel="noreferrer">
+              Walking demo
+              <i data-lucide="play"></i>
+            </a>
+            <a href="hexapod-project.html">
+              Detail page
+              <i data-lucide="arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <div class="project-grid">
+        <article class="project">
+          <a class="project-image" href="playing-card-project.html" aria-label="Open Playing Card Project detail page">
+            <img src="assets/card-robot-completed-2.jpg" alt="Playing card shuffler and dealer robot">
+          </a>
+          <div class="project-body">
+            <div class="project-topline">
+              <span>Mechatronics</span>
+              <span>First-year design</span>
+            </div>
+            <h3><a href="playing-card-project.html">Playing Card Dealer</a></h3>
+            <p>
+              Built a robot for a first semester university project with the goal of
+              shuffling and dealing a deck of cards through a physical mechanism.
+            </p>
+            <ul class="tag-list">
+              <li>Mechanism design</li>
+              <li>Prototyping</li>
+              <li>Team build</li>
+            </ul>
+            <a class="inline-link" href="playing-card-project.html">
+              Detail page <i data-lucide="arrow-right"></i>
+            </a>
+          </div>
+        </article>
+
+        <article class="project">
+          <a class="project-image" href="local-ai-workspace.html" aria-label="Open Local AI Workspace detail page">
+            <img src="assets/ai-workspace-dashboard-1.jpg" alt="Local AI Workspace operational interface dashboard">
+          </a>
+          <div class="project-body">
+            <div class="project-topline">
+              <span>AI Engineering</span>
+              <span>Local orchestration</span>
+            </div>
+            <h3><a href="local-ai-workspace.html">Local AI Workspace</a></h3>
+            <p>
+              Building and optimizing a self-hosted, privacy-first AI development environment utilizing Odysseus,
+              OpenClaw, and Ollama to handle local repository manipulation.
+            </p>
+            <ul class="tag-list">
+              <li>Odysseus</li>
+              <li>OpenClaw</li>
+              <li>Ollama</li>
+            </ul>
+            <a class="inline-link" href="local-ai-workspace.html">
+              Detail page <i data-lucide="arrow-right"></i>
+            </a>
+          </div>
+        </article>
+
+        <article class="project">
+          <a class="project-image" href="vex-robotics.html" aria-label="Open VEX Robotics detail page">
+            <img src="assets/vex-robot-competition.jpg" alt="VEX Robotics competition robot">
+          </a>
+          <div class="project-body">
+            <div class="project-topline">
+              <span>Competition robotics</span>
+              <span>2023 VEX</span>
+            </div>
+            <h3><a href="vex-robotics.html">VEX Robotics</a></h3>
+            <p>
+              Designed and built a competition robot for the 2023 VEX Robotics game
+              using a strategy that differed from many other groups.
+            </p>
+            <ul class="tag-list">
+              <li>Drive systems</li>
+              <li>Rapid iteration</li>
+              <li>Competition strategy</li>
+            </ul>
+            <div class="project-links compact">
+              <a href="https://www.youtube.com/watch?v=YI1zTATKuZI" target="_blank" rel="noreferrer">
+                Video <i data-lucide="play"></i>
+              </a>
+              <a href="vex-robotics.html">
+                Detail page <i data-lucide="arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section process" id="process">
+      <div class="section-heading">
+        <p class="section-kicker">How I work</p>
+        <h2>From rough idea to measured improvement</h2>
+      </div>
+      <div class="process-list">
+        <div>
+          <span>01</span>
+          <h3>Define the constraint</h3>
+          <p>Start with the real success condition: distance, payload, motion, reliability, weight, budget, or
+            competition rules.</p>
+        </div>
+        <div>
+          <span>02</span>
+          <h3>Prototype the hard part</h3>
+          <p>Build around the highest-risk mechanism first so the design learns from physical behavior early.</p>
+        </div>
+        <div>
+          <span>03</span>
+          <h3>Test, break, revise</h3>
+          <p>Use failures as data, then adjust geometry, materials, electronics, code, or assembly process.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section split-section" id="skills">
+      <div>
+        <p class="section-kicker">Smaller builds</p>
+        <h2>Additional projects</h2>
+        <p>
+          These smaller projects round out the portfolio with focused mechanism and
+          troubleshooting work.
+        </p>
+      </div>
+      <div class="mini-projects">
+        <a href="additional-projects.html#printer">3D printer customization and repairs</a>
+        <a href="additional-projects.html#projectile">Projectile ballista launcher</a>
+      </div>
+    </section>
+
+    <section class="section skills-band" aria-label="Engineering skills">
+      <h2>Skills and tools</h2>
+      <div class="skill-columns">
+        <div>
+          <h3>Mechanical & Design</h3>
+          <p>SolidWorks, Fusion 360, AutoCAD, Blender, FEA, 3D printing, rapid prototyping, and iterative design.</p>
+        </div>
+        <div>
+          <h3>Electronics & Control</h3>
+          <p>Circuit design/analysis, microcontrollers, Arduino, PLCs, soldering, signal analysis, and data acquisition.</p>
+        </div>
+        <div>
+          <h3>Software & Analysis</h3>
+          <p>C/C++, Python, MATLAB, RobotC, Git, Docker, VS Code, systems modeling, optimization, and statistical analysis.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div>
+      <p class="section-kicker">Contact</p>
+      <h2>Let's build something that survives the test bench.</h2>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:jhodson@uwaterloo.ca">
+        <i data-lucide="mail"></i>
+        jhodson@uwaterloo.ca
+      </a>
+      <a href="https://www.linkedin.com/in/jhodson/" target="_blank" rel="noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/jhodson06" target="_blank" rel="noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A4.8 4.8 0 0 0 8 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        GitHub
+      </a>
+      <a href="Joshua%20Hodson%20Resume.pdf" target="_blank" rel="noreferrer">
+        <i data-lucide="file-text"></i>
+        Resume
+      </a>
+    </div>
+  </footer>
+</body>
+
+</html>

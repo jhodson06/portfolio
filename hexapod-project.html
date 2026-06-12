@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Detailed case study for Joshua Hodson's hexapod robot project.">
+    <title>Hexapod Project | Joshua Hodson</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="Joshua Hodson home">
+        <span class="brand-mark">JH</span>
+        <span>Joshua Hodson</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="index.html#projects">Projects</a>
+        <a href="#files">Files</a>
+        <a href="#videos">Videos</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+          <i data-lucide="menu"></i>
+        </button>
+        <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+          <i data-lucide="sun"></i>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="detail-hero">
+        <div>
+          <a class="back-link" href="index.html#projects"><i data-lucide="arrow-left"></i> Back to projects</a>
+          <h1>Hexapod</h1>
+          <p>
+            A six-month extension of an existing open-source hexapod build, focused on wiring cleanup,
+            3D printed leg redesigns, control-code changes, speed improvements, and reliability testing.
+          </p>
+        </div>
+        <img src="assets/hexapod-wiring-assembly-1.jpg" alt="Hexapod robot project illustration">
+      </section>
+
+      <section class="detail-section">
+        <h2>Project Overview</h2>
+        <p>
+          The hexapod stands as my largest and, in my opinion, most impressive project to date. Over a
+          period of six months, I researched, brainstormed, designed, tested, and refined different parts
+          of the robot. The robot was not originally designed by me: the base code and 3D models came
+          from Mark W Tech, and the first version was printed and assembled by a student from my high
+          school who graduated before me. My project was an extension of hers, but I made significant
+          modifications to both the original design and the first iteration of the robot.
+        </p>
+        <p class="note">(Please note that the Mark W Tech website is currently unavailable.)</p>
+      </section>
+
+      <section class="detail-section two-column">
+        <div>
+          <h2>What I Started With</h2>
+          <figure class="photo-placeholder ratio-4-3">
+            <img src="assets/hexapod-original-condition.jpg" alt="Original hexapod robot condition">
+            <figcaption>Original condition when received</figcaption>
+          </figure>
+          <p>
+            When I first received the robot, it was functional but slow, unreliable, and messy. There were
+            loose wires, unconnected boards and sensors, poor connections, wooden spacers on the legs,
+            mismatched screws, missing screws, and visible damage on many of the 3D printed legs. Cracks
+            and tears in the printed parts made the robot especially prone to failure during testing.
+          </p>
+        </div>
+        <div>
+          <h2>Wiring</h2>
+          <figure class="photo-placeholder ratio-4-3">
+            <img src="assets/hexapod-wiring-assembly-2.jpg" alt="Hexapod wiring cleanup and component routing">
+            <figcaption>Wiring cleanup and component routing</figcaption>
+          </figure>
+          <p>
+            My first major task was reorganizing the wiring. I ordered an Arduino shield so the motors
+            could connect directly to the main board, moved and secured components, routed the battery
+            more cleanly, and bundled the wires with cable ties. I also modified the code so the motors
+            could be connected more flexibly while still leaving enough wire slack for leg movement.
+          </p>
+        </div>
+      </section>
+
+      <section class="detail-section">
+        <h2>Redesigning The Legs</h2>
+        <div class="photo-grid two">
+          <figure class="photo-placeholder ratio-4-3">
+            <img src="assets/hexapod-broken-leg.jpg" alt="Broken hexapod leg bracket">
+            <figcaption>Broken leg bracket</figcaption>
+          </figure>
+          <figure class="photo-placeholder ratio-4-3">
+            <img src="assets/hexapod-redesigned-leg.jpg" alt="Redesigned and printed hexapod leg part">
+            <figcaption>Redesigned printed part</figcaption>
+          </figure>
+        </div>
+        <p>
+          The biggest mechanical issue was that the legs frequently broke. The more I improved the speed
+          and stabilization, the more often the brackets holding the motors snapped along the print layer
+          lines. I spent weeks redesigning parts, changing print settings, reprinting, and testing. Because
+          I could only produce a few parts each week, progress was slow.
+        </p>
+        <p>
+          Eventually I realized about half of the breaks were caused by the robot slipping and putting too
+          much weight on certain legs. I adjusted the code and added LEGO tires to improve grip, which
+          helped, but some failures continued. On the last day of the project, I discovered that the PLA
+          filament I had used all year was much weaker than the original material, likely because it was
+          expired or poor quality. That explained many of the recurring failures, but there was no time left
+          to rebuild the parts.
+        </p>
+      </section>
+
+      <section class="detail-section">
+        <h2>Code</h2>
+        <p>
+          The code was over 1000 lines in a language I was not familiar with, so the first challenge was
+          simply understanding how the robot worked. After many hours of reading and testing, I began to
+          understand the main sections and how the robot translated controller input into leg movement.
+        </p>
+        <p>
+          I made several changes: increasing the robot's speed, changing output ports, adjusting body
+          and leg operating heights, and adding a function to mirror commands for a replacement motor
+          that interpreted inputs differently from the others. The speed changes made the robot more
+          impressive, but they also exposed the mechanical weaknesses in the printed legs.
+        </p>
+      </section>
+
+      <section class="detail-section reflection-files" id="files">
+        <div>
+          <h2>Reflection & Files</h2>
+          <p>
+            Although I was disappointed that the robot still had reliability problems, I was proud of how
+            much I learned. The project taught me more than almost any previous build: wiring, mechanical
+            troubleshooting, print quality, code reading, testing, and the way one improvement can reveal a
+            new weakness somewhere else in the system.
+          </p>
+        </div>
+        <div class="resource-stack">
+          <a class="resource-link" href="assets/docs/design-notebook-hexapod.pdf" target="_blank" rel="noreferrer">
+            <i data-lucide="file-text"></i>
+            Design Notebook.pdf
+          </a>
+          <div>
+            <a class="resource-link" href="assets/code/markwtech-hexapod-original.ino" target="_blank" rel="noreferrer">
+              <i data-lucide="code-2"></i>
+              Original Hexapod Code
+            </a>
+            <p>
+              This file is Mark W Tech's original, unmodified code. My personally edited version has been
+              lost and is not available.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="detail-section" id="videos">
+        <h2>Videos</h2>
+        <p>Below are videos of the robot in operation. The robot is fully controlled with a PS2 controller.</p>
+        <div class="video-grid">
+          <iframe src="https://www.youtube.com/embed/QSL5mXtsqSA" title="Hexapod robot video 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/I_p68kZYekw" title="Demonstration of different walking methods" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/dK2C2hrPKEg" title="Demonstration of custom offsets" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/UM5ISYuhwQM" title="Example of a common leg breakage" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer compact-footer">
+      <a href="mailto:jhodson@uwaterloo.ca"><i data-lucide="mail"></i> jhodson@uwaterloo.ca</a>
+      <a href="https://www.linkedin.com/in/jhodson/" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg> LinkedIn</a>
+      <a href="https://github.com/jhodson06" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A4.8 4.8 0 0 0 8 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub</a>
+      <a href="Joshua%20Hodson%20Resume.pdf" target="_blank" rel="noreferrer"><i data-lucide="file-text"></i> Resume</a>
+    </footer>
+  </body>
+</html>

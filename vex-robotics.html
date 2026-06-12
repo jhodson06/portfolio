@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Detailed case study for Joshua Hodson's VEX Robotics project.">
+  <title>VEX Robotics | Joshua Hodson</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Joshua Hodson home">
+      <span class="brand-mark">JH</span>
+      <span>Joshua Hodson</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="index.html#projects">Projects</a>
+      <a href="#video">Video</a>
+      <a href="#files">Files</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+      <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+        <i data-lucide="sun"></i>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="detail-hero">
+      <div>
+        <a class="back-link" href="index.html#projects"><i data-lucide="arrow-left"></i> Back to projects</a>
+        <h1>VEX Robotics</h1>
+        <p>
+          A senior-year high school robotics project to design, build, and program a VEX competition robot with a
+          small two-person team, emphasizing drivetrain optimization, rapid testing, and a custom vertical-climbing
+          mechanism.
+        </p>
+      </div>
+      <img src="assets/vex-robot-competition.jpg" alt="VEX Robotics competition robot">
+    </section>
+
+    <section class="detail-section">
+      <h2>Project Overview</h2>
+      <p>
+        My VEX Robotics project took place during my senior year of high school. The goal was to design
+        and build a robot for the 2023-2024 high school VEX Robotics competition. The project was
+        completed by me and one other student, and we both contributed to the robot's design. The robot
+        had to fit within the size limit, perform the required game tasks, and be built almost entirely
+        from VEX Robotics parts.
+      </p>
+      <p>
+        Our team was smaller than most teams, which often had five or more members. We treated the
+        project mainly as a learning opportunity, but still worked to perform well and build a unique,
+        functional robot.
+      </p>
+    </section>
+
+    <section class="detail-section two-column media-left" id="video">
+      <div>
+        <div class="photo-row">
+          <figure class="photo-placeholder ratio-4-3">
+            <img src="assets/vex-field-layout.jpg" alt="VEX Robotics field layout and scoring zones">
+            <figcaption>VEX Robotics Over Under field layout</figcaption>
+          </figure>
+        </div>
+        <div class="video-grid single">
+          <iframe src="https://www.youtube.com/embed/YI1zTATKuZI" title="VEX Robotics match video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div>
+        <h2>The Game</h2>
+        <p>
+          The 2023-2024 VEX Robotics Competition game, <strong>Over Under</strong>, is played on a 12' x 12' square
+          field.
+          Each match features two alliances (red and blue) of two teams each, competing in a 15-second autonomous period
+          followed by 1 minute and 45 seconds of driver-controlled play.
+          The main objective is to score green, triangular-shaped plastic scoring objects called "triballs" into goals
+          or alliance offensive zones.
+          A central barrier pipe divides the field, serving as both a mechanical obstacle and a scoring threshold.
+          Teams earn 5 points for each triball inside their goal, and 2 points for each triball in their offensive zone.
+        </p>
+        <p>
+          At the end of the match, alliances attempt to elevate their robots above the ground using the barrier pipes.
+          Depending on how high a robot climbs relative to the other robots, significant "hang points" are awarded.
+          This elevation phase is often the deciding factor in close matches.
+          Due to our small team size, we had to coordinate our strategy carefully: we built our robot with a low-profile
+          chassis to quickly push triballs under goals, and integrated a robust vertical climb system to ensure
+          high-tier hang points at the buzzer.
+        </p>
+      </div>
+    </section>
+
+    <section class="detail-section">
+      <h2>Our Design</h2>
+      <div class="photo-grid three">
+        <figure class="photo-placeholder ratio-square">
+          <img src="assets/vex-robot-views-front.jpg" alt="Front view (uncompleted)">
+          <figcaption>Front view (uncompleted)</figcaption>
+        </figure>
+        <figure class="photo-placeholder ratio-square">
+          <img src="assets/vex-robot-views-side.jpg" alt="Side view (uncompleted)">
+          <figcaption>Side view (uncompleted)</figcaption>
+        </figure>
+        <figure class="photo-placeholder ratio-square">
+          <img src="assets/vex-robot-views-rear.jpg" alt="Rear view (uncompleted)">
+          <figcaption>Rear view (uncompleted)</figcaption>
+        </figure>
+      </div>
+      <p>
+        Our design goals were to launch balls with acceptable speed and accuracy, drive over ground
+        pipes, push balls effectively, handle multiple balls, and eventually climb. For the drivetrain, we
+        used a 4WD system with each main wheel powered by its own motor. Soft middle wheels and front
+        ramps helped the robot drive over pipes without getting stuck.
+      </p>
+      <p>
+        The climbing mechanism required a major redesign. The final version placed the puncher above
+        the climbing mechanism and directly over the crossbar. This allowed the robot to climb, raise the
+        mechanism to block opposing shots, and lift the launcher above blockers when needed. The
+        climbing mechanism drew a lot of attention because very few robots used a similar approach.
+      </p>
+      <p class="note">
+        For the launcher, we implemented a puncher system. I did not build that subsystem, so I cannot
+        provide a detailed explanation of its internal operation.
+      </p>
+    </section>
+
+    <section class="detail-section reflection-files" id="files">
+      <div>
+        <h2>Reflection & Files</h2>
+        <p>
+          This was an incredibly enjoyable project and one of my first major robotics builds. I learned a
+          great deal about time management, design iteration, documentation, unexpected problems, VEX
+          hardware, and the competitive robotics environment. Our robot performed above average despite
+          the small team size, and I am proud of the progress we made.
+        </p>
+      </div>
+      <div class="resource-stack">
+        <a class="resource-link" href="assets/docs/Design%20Notebook%20-%20VEX%20Robotics.pdf" target="_blank"
+          rel="noreferrer">
+          <i data-lucide="file-text"></i>
+          Design Notebook
+        </a>
+        <a class="resource-link" href="assets/docs/VRC-Manual-2023-24-4.0.pdf" target="_blank" rel="noreferrer">
+          <i data-lucide="book-open"></i>
+          VRC Manual
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer compact-footer">
+    <a href="mailto:jhodson@uwaterloo.ca"><i data-lucide="mail"></i> jhodson@uwaterloo.ca</a>
+    <a href="https://www.linkedin.com/in/jhodson/" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn</a>
+    <a href="https://github.com/jhodson06" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A4.8 4.8 0 0 0 8 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub</a>
+    <a href="Joshua%20Hodson%20Resume.pdf" target="_blank" rel="noreferrer"><i data-lucide="file-text"></i> Resume</a>
+  </footer>
+</body>
+
+</html>

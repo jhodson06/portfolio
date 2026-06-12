@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Detailed case study for Joshua Hodson's LEGO EV3 card shuffler and dealer project.">
+  <title>Card Dealer | Joshua Hodson</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Joshua Hodson home">
+      <span class="brand-mark">JH</span>
+      <span>Joshua Hodson</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="index.html#projects">Projects</a>
+      <a href="#files">Files</a>
+      <a href="#photos">Photos</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+      <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+        <i data-lucide="sun"></i>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="detail-hero">
+      <div>
+        <a class="back-link" href="index.html#projects"><i data-lucide="arrow-left"></i> Back to projects</a>
+        <h1>Card Dealer</h1>
+        <p>
+          A university team project to design, prototype, test, and present a LEGO EV3
+          robot that could shuffle and deal playing cards, combining mechanism design, sensor feedback,
+          and EV3 programming over a month-long team build.
+        </p>
+      </div>
+      <img src="assets/card-robot-completed-1.jpg" alt="LEGO EV3 card shuffler and dealer robot">
+    </section>
+
+    <section class="detail-section">
+      <h2>Project Overview</h2>
+      <p>
+        This project was completed as a final project in my first semester of university with three other
+        students from my program. Over about a month, our group followed the engineering process:
+        identifying a problem, researching and brainstorming solutions, establishing criteria and
+        constraints, developing a proposal, prototyping, testing, redesigning, evaluating the result, and
+        presenting the final project.
+      </p>
+    </section>
+
+    <section class="detail-section two-column media-left">
+      <div>
+        <figure class="photo-placeholder ratio-square">
+          <img src="assets/card-robot-sketch.jpg" alt="Early concept sketch">
+          <figcaption>Early concept sketch</figcaption>
+        </figure>
+      </div>
+      <div>
+        <h2>Initial Idea / Criteria</h2>
+        <p>
+          The robot had to solve a problem and had to be constructed primarily from LEGO EV3 components,
+          with minimal outside resources. After exploring different ideas, our team drew inspiration from
+          card dealers and casinos. Dealers are important in many card games, but they can introduce
+          human error, cheating risk, and inconsistency. Our proposed solution was a robot capable of
+          shuffling and dealing cards to reduce those issues.
+        </p>
+        <p>
+          We wanted the robot to support multiple card games with customizable settings. It needed to
+          shuffle independently, deal according to selected settings, work with cards of different colors
+          and conditions, and include anti-jamming behavior to improve reliability.
+        </p>
+      </div>
+    </section>
+
+    <section class="detail-section two-column">
+      <div>
+        <h2>Designing The Robot</h2>
+        <figure class="photo-placeholder ratio-4-3">
+          <img src="assets/card-robot-chute-1.jpg" alt="Shuffle mechanism prototype">
+          <figcaption>Dealing mechanism prototype</figcaption>
+        </figure>
+        <p>
+          The robot used sensors to detect card placement and jams. Motors handled shuffling, dealing,
+          and rotation, while motor encoders supported more controlled motion. A gyro sensor helped
+          manage rotation. The software followed a structured sequence: startup, wait for cards,
+          shuffle, deal, and run anti-jamming checks when needed.
+        </p>
+      </div>
+      <div>
+        <h2>Operation</h2>
+        <figure class="photo-placeholder ratio-4-3">
+          <img src="assets/card-robot-chute-2.jpg" alt="Card chute and dealing path">
+          <figcaption>Card chute</figcaption>
+        </figure>
+        <p>
+          Early versions allowed cards to be removed from the center after shuffling for another shuffle
+          pass. After redesigning, we simplified the mechanism and instead randomized the order in
+          which cards were dealt, preserving randomness while making the robot more reliable.
+        </p>
+      </div>
+    </section>
+
+    <section class="detail-section two-column media-left">
+      <div>
+        <figure class="photo-placeholder ratio-3-4">
+          <img src="assets/card-robot-programming.jpg" alt="EV3 programming and testing">
+          <figcaption>EV3 C Program</figcaption>
+        </figure>
+      </div>
+      <div>
+        <h2>My Contribution</h2>
+        <p>
+          All team members contributed ideas, design work, and final report sections. My individual focus
+          was primarily software. I wrote and troubleshooted much of the EV3 code and created functions for shuffling,
+          dealing, rotation, and anti-jamming checks when
+          sensors detected a stuck card.
+        </p>
+        <p>
+          A large part of my work was translating the mechanical design into reliable behavior. That meant
+          reading sensor states, using motor encoders and the gyro sensor for more controlled motion, and
+          adjusting timing, motor power, and logic paths when the robot mis-fed cards or stopped
+          mid-sequence. After we simplified the dealing mechanism, I also programmed randomized deal order
+          so the robot stayed unpredictable without needing a second shuffle pass.
+        </p>
+        <p>
+          During the final phase of the project, most of my time went into testing and debugging. I ran
+          repeated trials, fixed failures as they appeared, and tuned the program for better speed and
+          consistency. It was my first major university build, and the software side showed me how much
+          iteration it takes to make a physical system actually work.
+        </p>
+      </div>
+    </section>
+
+    <section class="detail-section reflection-files" id="files">
+      <div>
+        <h2>Reflection & Files</h2>
+        <p>
+          To evaluate the design, we tested the robot against the criteria we had defined earlier in the
+          process. This was my first major university engineering project, and it was much more complex
+          than anything I had done before. The amount of research, design justification, testing, and final
+          reporting made it a strong learning experience.
+        </p>
+      </div>
+      <div class="resource-stack">
+        <a class="resource-link" href="assets/docs/MTE%201A%20Final%20project%20report.pdf" target="_blank"
+          rel="noreferrer">
+          <i data-lucide="file-text"></i>
+          MTE 1A Final project report.pdf
+        </a>
+        <a class="resource-link" href="assets/code/card-dealer-code.c" target="_blank" rel="noreferrer">
+          <i data-lucide="code-2"></i>
+          Card Dealer Code
+        </a>
+      </div>
+    </section>
+
+    <section class="detail-section" id="photos">
+      <h2>Photos</h2>
+      <div class="photo-grid three">
+        <figure class="photo-placeholder ratio-4-3">
+          <img src="assets/card-robot-completed-2.jpg" alt="Completed LEGO EV3 card shuffler and dealer robot">
+        </figure>
+        <figure class="photo-placeholder ratio-4-3">
+          <img src="assets/card-robot-details-1.jpg" alt="EV3 card dealer robot top view">
+        </figure>
+        <figure class="photo-placeholder ratio-4-3">
+          <img src="assets/card-robot-details-2.jpg" alt="EV3 card shuffler chassis close-up">
+        </figure>
+        <figure class="photo-placeholder ratio-4-3">
+          <img src="assets/card-robot-details-3.jpg" alt="EV3 card dealer side profile">
+        </figure>
+        <figure class="photo-placeholder ratio-4-3">
+          <img src="assets/card-robot-details-4.jpg" alt="Card loader chute details">
+        </figure>
+        <figure class="photo-placeholder ratio-4-3">
+          <img src="assets/card-robot-design-drawing.jpg" alt="Robot mechanism design drawing">
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer compact-footer">
+    <a href="mailto:jhodson@uwaterloo.ca"><i data-lucide="mail"></i> jhodson@uwaterloo.ca</a>
+    <a href="https://www.linkedin.com/in/jhodson/" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn</a>
+    <a href="https://github.com/jhodson06" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A4.8 4.8 0 0 0 8 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub</a>
+    <a href="Joshua%20Hodson%20Resume.pdf" target="_blank" rel="noreferrer"><i data-lucide="file-text"></i> Resume</a>
+  </footer>
+</body>
+
+</html>
