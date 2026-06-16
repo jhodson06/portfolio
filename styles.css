@@ -174,7 +174,7 @@ a {
 }
 
 .hero-copy {
-  max-width: 760px;
+  max-width: 1000px;
 }
 
 .eyebrow,
@@ -201,7 +201,7 @@ a {
 }
 
 .hero h1 {
-  max-width: 760px;
+  max-width: 1000px;
   margin: 14px 0 22px;
   font-size: clamp(2.6rem, 5.4vw, 5.2rem);
   line-height: 1.02;
@@ -209,7 +209,7 @@ a {
 }
 
 .hero p {
-  max-width: 650px;
+  max-width: 920px;
   color: var(--muted);
   font-size: clamp(1.02rem, 1.35vw, 1.22rem);
 }
