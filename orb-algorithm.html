@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="Detailed case study for Joshua Hodson's Opening Range Breakout (ORB) Algorithmic Trading Bot.">
+  <title>Algorithmic Trading Bot | Joshua Hodson</title>
+  <link rel="stylesheet" href="styles.css?v=4">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTM6M3TF0B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-ZTM6M3TF0B');
+  </script>
+  <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="main.js"></script>
+</head>
+
+<body>
+  <canvas id="bg-canvas" class="animated-background"></canvas>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Joshua Hodson home">
+      <span class="brand-mark">JH</span>
+      <span>Joshua Hodson</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="index.html#projects">Projects</a>
+      <a href="#files">Files</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+      <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+        <i data-lucide="sun"></i>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="detail-hero">
+      <div>
+        <a class="back-link" href="index.html#projects"><i data-lucide="arrow-left"></i> Back to projects</a>
+        <h1>Algorithmic Trading Bot</h1>
+        <p>
+          A fully automated, cloud-hosted trading bot that executes an Opening Range Breakout strategy across highly
+          volatile stocks like Tesla and Nvidia.
+        </p>
+        <p style="margin-top: 16px; font-size: 0.95rem; font-weight: 600; color: var(--ink);">
+          👉 Check out the widget on this page to see the bot's real-time live portfolio!
+        </p>
+      </div>
+      <div class="photo-placeholder ratio-4-3" id="portfolio-widget"
+        style="padding: 32px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: none; flex-direction: column; justify-content: center;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div
+            style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: var(--muted); letter-spacing: 0.1em;">
+            Live Portfolio</div>
+          <div
+            style="display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--accent); font-weight: 700;">
+            <div
+              style="min-width: 12px; min-height: 12px; width: 12px; height: 12px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 6px var(--accent); flex-shrink: 0;">
+            </div>
+            ACTIVE
+          </div>
+        </div>
+        <div style="font-size: 2.8rem; font-weight: 800; color: var(--ink); margin-bottom: 4px;" id="portfolio-equity">
+          ...</div>
+        <div style="font-size: 1rem; font-weight: 600;" id="portfolio-pl">...</div>
+        <div style="margin-top: 24px; position: relative; flex-grow: 1; height: 100%; min-height: 0;">
+          <canvas id="portfolio-chart"></canvas>
+        </div>
+        <div style="font-size: 0.75rem; color: var(--muted); margin-top: 16px; text-align: right;"
+          id="portfolio-timestamp">Last updated: ...</div>
+      </div>
+    </section>
+
+    <section class="detail-section">
+      <h2>Project Overview</h2>
+      <p>
+        I built a fully automated trading bot that runs 24/7 on Oracle Cloud. It connects directly to the Alpaca
+        brokerage API to trade an Opening Range Breakout strategy on highly volatile stocks. From analyzing pre-market
+        data to managing active trades and liquidating positions before the market closes, the entire system runs
+        completely on its own without any human intervention.
+      </p>
+      <h3 style="margin-top: 32px;">The Problem</h3>
+      <p>
+        Most home-built trading bots fail as soon as they go live. This usually happens for a few reasons:
+      </p>
+      <ul style="color: var(--muted); line-height: 1.6; margin-top: 14px; padding-left: 20px;">
+        <li style="margin-bottom: 10px;">They work great in perfect simulations, but break during real-world network
+          drops or API errors.</li>
+        <li style="margin-bottom: 10px;">They can't recover from crashes. If a server reboots mid-day, the bot
+          completely forgets what it was doing and leaves your money stranded.</li>
+        <li style="margin-bottom: 10px;">They don't handle edge cases well, like the stock market closing early on
+          holidays or multiple trades triggering at the exact same time.</li>
+      </ul>
+      <p>I built this bot specifically to tackle those live-environment challenges.</p>
+    </section>
+
+    <section class="detail-section two-column media-left">
+      <div>
+        <div class="photo-placeholder ratio-square"
+          style="min-height: 360px; display: grid; place-items: center; border-radius: var(--radius); background: var(--photo-bg);">
+          <svg viewBox="0 0 400 400" style="width: 100%; height: 100%; max-width: 360px; display: block; margin: 0 auto; font-family: inherit;">
+            <!-- Grid Lines -->
+            <line x1="60" y1="60" x2="360" y2="60" stroke="var(--line)" stroke-dasharray="4 4" stroke-width="1" />
+            <line x1="60" y1="160" x2="360" y2="160" stroke="var(--line)" stroke-dasharray="4 4" stroke-width="1" />
+            <line x1="60" y1="260" x2="360" y2="260" stroke="var(--line)" stroke-dasharray="4 4" stroke-width="1" />
+            
+            <line x1="160" y1="60" x2="160" y2="360" stroke="var(--line)" stroke-dasharray="4 4" stroke-width="1" />
+            
+            <!-- Opening Range Box (9:30 - 9:45) -->
+            <rect x="60" y="160" width="100" height="100" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 4" />
+            <text x="110" y="210" fill="var(--accent)" font-size="12" font-weight="800" text-anchor="middle" dominant-baseline="middle" style="letter-spacing: 0.05em; text-transform: uppercase;">Opening Range</text>
+
+            <!-- Y-Axis Labels -->
+            <text x="50" y="60" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="end" dominant-baseline="middle">Take Profit</text>
+            <text x="50" y="160" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="end" dominant-baseline="middle">ORB High</text>
+            <text x="50" y="260" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="end" dominant-baseline="middle">ORB Low</text>
+
+            <!-- X-Axis Labels -->
+            <text x="60" y="380" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="middle">9:30 AM</text>
+            <text x="160" y="380" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="middle">9:45 AM</text>
+
+            <!-- Take profit and Stop Loss boundary lines -->
+            <line x1="160" y1="60" x2="360" y2="60" stroke="var(--accent)" stroke-dasharray="6 4" stroke-width="2" />
+            <line x1="160" y1="260" x2="360" y2="260" stroke="#f85149" stroke-dasharray="6 4" stroke-width="2" />
+            <text x="350" y="250" fill="#f85149" font-size="10" font-weight="800" text-anchor="end">STOP LOSS</text>
+
+            <!-- The Stock Price Line -->
+            <!-- Path starts outside box, bounces inside, breaks out at x=160, hits take profit at x=300 -->
+            <path d="M 20 200 Q 40 180, 60 190 T 110 230 T 150 170 L 160 160 L 190 120 L 230 110 L 270 80 L 300 60 L 340 50" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+
+            <!-- Breakout Trigger Point -->
+            <circle cx="160" cy="160" r="7" fill="var(--accent)" />
+            <circle cx="160" cy="160" r="15" fill="var(--accent)" fill-opacity="0.25" />
+            
+            <!-- Buy Badge -->
+            <rect x="175" y="150" width="85" height="22" rx="4" fill="var(--surface)" stroke="var(--line)" stroke-width="1" />
+            <text x="182" y="165" fill="var(--accent)" font-size="10" font-weight="800" style="letter-spacing: 0.05em;">BUY SIGNAL</text>
+
+            <!-- Profit Target Point -->
+            <circle cx="300" cy="60" r="6" fill="var(--accent)" />
+            <rect x="310" y="50" width="70" height="22" rx="4" fill="var(--surface)" stroke="var(--line)" stroke-width="1" />
+            <text x="317" y="65" fill="var(--accent)" font-size="10" font-weight="800" style="letter-spacing: 0.05em;">FILLED</text>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <h2>How it Trades</h2>
+        <p>
+          The bot trades an Opening Range Breakout strategy, which is designed to catch big price moves right after the
+          market opens. For the first few minutes of the day, it watches a stock and maps out its highest and lowest
+          prices (the "opening range").
+        </p>
+        <p style="margin-top: 14px;">
+          <strong>Entering Trades:</strong> If the stock breaks out above that high (or below that low) and has strong
+          momentum, the bot automatically jumps in.
+        </p>
+        <p style="margin-top: 14px;">
+          <strong>Managing Risk:</strong> Every time the bot enters a trade, it instantly places safety nets (stop-loss
+          and take-profit orders) to protect the account. If a trade drags on into the afternoon, the bot automatically
+          tightens its targets so it can exit safely. By 3:55 PM, it sells everything so no money is left at risk
+          overnight.
+        </p>
+      </div>
+    </section>
+
+    <section class="detail-section">
+      <h2>Engineering Highlights</h2>
+      <p style="margin-bottom: 32px;">
+        Building a bot that just buys a stock is easy. Building one that can run safely and autonomously for months
+        requires solving a lot of tricky engineering problems.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+        <div
+          style="background: var(--surface); padding: 24px; border: 1px solid var(--line); border-radius: var(--radius);">
+          <h3 style="font-size: 1.1rem; margin: 0 0 12px; color: var(--ink);">Mid-Day Crash Recovery</h3>
+          <p style="font-size: 0.95rem; color: var(--muted); margin: 0;"><strong>Problem:</strong> If the server
+            restarts while trades are open, the bot wakes up completely blind.<br><strong>Solution:</strong> When the
+            bot turns on, it directly asks the broker API what is currently happening and rebuilds its internal memory
+            from scratch.</p>
+        </div>
+        <div
+          style="background: var(--surface); padding: 24px; border: 1px solid var(--line); border-radius: var(--radius);">
+          <h3 style="font-size: 1.1rem; margin: 0 0 12px; color: var(--ink);">Preventing "Phantom" Trades</h3>
+          <p style="font-size: 0.95rem; color: var(--muted); margin: 0;"><strong>Problem:</strong> Sometimes the bot
+            tries to cancel a trade at the exact millisecond the broker fills it, causing
+            confusion.<br><strong>Solution:</strong> The bot constantly double-checks its own memory against the live
+            broker account every 30 seconds to make sure they match perfectly.</p>
+        </div>
+        <div
+          style="background: var(--surface); padding: 24px; border: 1px solid var(--line); border-radius: var(--radius);">
+          <h3 style="font-size: 1.1rem; margin: 0 0 12px; color: var(--ink);">Handling Simultaneous Trades</h3>
+          <p style="font-size: 0.95rem; color: var(--muted); margin: 0;"><strong>Problem:</strong> If three stocks break
+            out at the exact same time, the bot could accidentally spend more money than it
+            has.<br><strong>Solution:</strong> The system detects these simultaneous triggers in real-time and perfectly
+            splits the remaining account balance between them.</p>
+        </div>
+        <div
+          style="background: var(--surface); padding: 24px; border: 1px solid var(--line); border-radius: var(--radius);">
+          <h3 style="font-size: 1.1rem; margin: 0 0 12px; color: var(--ink);">Corrupt-Proof Memory</h3>
+          <p style="font-size: 0.95rem; color: var(--muted); margin: 0;"><strong>Problem:</strong> If the power cuts out
+            while the bot is saving its memory file, the file gets corrupted.<br><strong>Solution:</strong> The bot
+            saves its memory to a temporary file first, and only replaces the real file once the save is 100% complete.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="detail-section">
+      <h2>Working with AI to Optimize Strategy</h2>
+      <p>
+        A huge part of this project was using AI pair-programming to help run massive backtests and figure out the best
+        settings. Instead of just guessing what numbers to use, we ran thousands of simulations to find what actually
+        works.
+      </p>
+      <p style="margin-top: 14px;">
+        <strong>The Power of Cross-Compounding:</strong> We found that trading a basket of stocks all from the same pool
+        of money is incredibly powerful. If one stock makes a profit in the morning, that extra cash is immediately used
+        to buy a larger position in a different stock in the afternoon, snowballing the returns.
+      </p>
+      <p style="margin-top: 14px;">
+        <strong>Customizing for Directions:</strong> Through all those simulations, we discovered that stocks behave
+        very differently when they go up versus when they go down. The bot now uses completely different rules for
+        "Long" (buying) and "Short" (selling) trades to maximize its win rate on every individual stock.
+      </p>
+    </section>
+
+    <section class="detail-section reflection-files" id="files">
+      <div>
+        <h2>Technology Stack & Resources</h2>
+        <p>
+          <strong>Core Language:</strong> Python 3<br>
+          <strong>Data Manipulation:</strong> pandas<br>
+          <strong>Brokerage API:</strong> alpaca-trade-api<br>
+          <strong>Infrastructure:</strong> Oracle Cloud (Ubuntu ARM), PM2 process manager<br>
+          <strong>Notifications:</strong> Discord webhook integration
+        </p>
+      </div>
+      <div class="resource-stack">
+        <div>
+          <a class="resource-link" href="assets/code/live_trader.py" target="_blank" rel="noreferrer">
+            <i data-lucide="code-2"></i>
+            Live Engine Source Code
+          </a>
+          <p>
+            <strong>Disclaimer:</strong> To protect the proprietary trading logic for live deployment, certain configurations, alpha filters, and infrastructure details have been redacted from the public source code.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer compact-footer">
+    <a href="mailto:jhodson@uwaterloo.ca"><i data-lucide="mail"></i> jhodson@uwaterloo.ca</a>
+    <a href="https://www.linkedin.com/in/jhodson/" target="_blank" rel="noreferrer"><svg
+        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin">
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+        <rect width="4" height="12" x="2" y="9" />
+        <circle cx="4" cy="4" r="2" />
+      </svg>
+      LinkedIn</a>
+    <a href="https://github.com/jhodson06" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" class="lucide lucide-github">
+        <path
+          d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A4.8 4.8 0 0 0 8 18v4" />
+        <path d="M9 18c-4.51 2-5-2-7-2" />
+      </svg> GitHub</a>
+    <a href="Joshua%20Hodson%20Resume.pdf" target="_blank" rel="noreferrer"><i data-lucide="file-text"></i> Resume</a>
+  </footer>
+</body>
+
+</html>
+

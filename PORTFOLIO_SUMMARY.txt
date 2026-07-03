@@ -1,0 +1,265 @@
+================================================================================
+ORB ALGORITHM — PORTFOLIO PROJECT SUMMARY
+================================================================================
+Project: Dynamic Opening Range Breakout (ORB) Algorithmic Trading System
+Type: Full-Stack Quantitative Finance / Software Engineering Project
+Status: Deployed to production cloud server (July 2026)
+
+================================================================================
+PROJECT OVERVIEW
+================================================================================
+
+Built a fully autonomous, cloud-hosted algorithmic trading bot that implements
+a dynamic Opening Range Breakout (ORB) strategy across a basket of high-
+volatility equities (AMD, NVDA, TSLA, COIN, HOOD). The system runs 24/7 on
+Oracle Cloud infrastructure, connects to the Alpaca brokerage API, and manages
+the complete trade lifecycle — from pre-market analysis to intraday entries,
+risk management, and end-of-day liquidation — entirely without human
+intervention during market hours.
+
+================================================================================
+THE PROBLEM
+================================================================================
+
+Most retail algorithmic trading systems fail in live environments for one of
+three reasons:
+
+  1. They are backtested but never hardened for live execution realities
+     (API failures, partial fills, network drops, broker-side rejections).
+
+  2. They have no state recovery — a mid-day crash means the bot loses
+     track of open positions, leaving them unmanaged and unprotected.
+
+  3. They assume a perfectly reliable environment and have no safeguards
+     against edge cases like early market closes, duplicate API data, or
+     simultaneous multi-symbol triggers competing for capital.
+
+This project was built from the ground up to solve all three.
+
+================================================================================
+STRATEGY OVERVIEW
+================================================================================
+
+The Opening Range Breakout strategy captures intraday momentum:
+
+  - During the first N minutes after market open (dynamically configured per
+    symbol, e.g., 9 mins for AMD, 10 mins for NVDA), the script records
+    the high and low of each symbol's "opening range."
+
+  - A long entry triggers when price closes above the ORB high with
+    supporting confirmation filters (VWAP alignment, relative volume,
+    average daily range, and pre-market gap size).
+
+  - A short entry triggers when price closes below the ORB low with the
+    same confirmation stack.
+
+  - Each entry is a bracket order: a market entry paired with a take-profit
+    limit order (2:1 reward-to-risk ratio) and a stop-loss order.
+
+  - From the early afternoon onward, the take-profit target decays linearly
+    toward entry price, ensuring positions are not left exposed overnight.
+
+  - All positions are force-liquidated at 3:55 PM ET regardless of status.
+
+The strategy was backtested across thousands of historical trading days using
+a custom backtest engine built in Python before the live system was written.
+
+================================================================================
+TECHNICAL ARCHITECTURE
+================================================================================
+
+LANGUAGE: Python 3
+
+CORE COMPONENTS:
+
+  live_trader.py (1,140 lines)
+    The production execution engine. Runs as a persistent process under PM2
+    on Oracle Cloud. Implements:
+      - Pre-market baseline fetching (ADR, RVOL, previous close)
+      - ORB bound calculation from intraday minute bars
+      - Cumulative session VWAP computation (bar by bar, no lookahead)
+      - Multi-filter breakout detection (30-second poll cycle)
+      - Bracket order submission via Alpaca REST API
+      - Dynamic take-profit decay engine
+      - End-of-day liquidation engine
+      - Atomic state persistence (crash-safe JSON with temp-file swap)
+      - Full crash recovery and mid-day state reconstruction
+      - Graceful shutdown via SIGINT/SIGTERM signal handlers
+      - Discord webhook notifications for every trade event
+
+  basket_config.json
+    Per-symbol strategy parameters loaded at runtime. Supports hot-swapping
+    symbols and parameters without code changes.
+
+  backtesting/analyze.py
+    A vectorised backtest engine that replays historical minute-bar data
+    with the same filter logic as the live system to ensure strategy
+    consistency between research and production.
+
+INFRASTRUCTURE:
+
+  - Hosted on Oracle Cloud (Ubuntu 24.04, free tier ARM instance)
+  - Process managed by PM2 with systemd auto-restart on server reboot
+  - 2GB swap configured for memory headroom
+  - Logs rotated automatically (5 x 10MB rolling files)
+
+BROKERAGE INTEGRATION:
+
+  - Alpaca Markets REST API (alpaca-trade-api v2)
+  - Paper trading account for validation; live account for production
+  - Bracket orders with time-in-force="day"
+  - All bot orders tagged with a unique client_order_id prefix
+
+================================================================================
+KEY ENGINEERING CHALLENGES SOLVED
+================================================================================
+
+1. MID-DAY CRASH RECOVERY
+   Problem: If the process crashes at 1:00 PM with open positions, a naive
+   restart would lose all context and leave positions unmanaged.
+   Solution: On every restart, the bot queries api.list_positions() and
+   api.list_orders() to reconstruct full trade state (entry price, stop
+   loss, take profit, direction) from the live broker — independent of
+   any local state file.
+
+2. PHANTOM POSITION DETECTION
+   Problem: If a cancel request and a fill confirmation arrive in the same
+   millisecond, the bot's state says "FAILED" but the broker holds shares.
+   Solution: A mid-day sync reconciles local state against live broker
+   positions every 30 seconds. Ownership is confirmed by detecting the
+   dual-leg bracket signature (both a limit TP order AND a stop SL order
+   must exist for the symbol).
+
+3. ZOMBIE ORDER PREVENTION
+   Problem: If the order-fill polling loop times out, the order may still
+   be live at the broker, creating an untracked position.
+   Solution: On polling timeout, a defensive cancel_order() is always
+   attempted. If polling fails completely (all calls raised exceptions),
+   the cancel is still attempted unconditionally.
+
+4. ZERO-LOOKAHEAD VWAP
+   Problem: Reading the "current" bar includes data from the still-forming
+   candle, introducing forward-looking bias not present in backtests.
+   Solution: The script explicitly computes current_minute = now with
+   seconds zeroed and only evaluates bars with index < current_minute,
+   ensuring only fully-closed bars are processed.
+
+5. SAFE ATOMIC STATE WRITES
+   Problem: A crash mid-write to the state JSON file corrupts it, and the
+   bot can no longer load its position on the next restart.
+   Solution: All state writes go to a .tmp file first, then os.replace()
+   atomically swaps it — a crash during write leaves the previous valid
+   state intact.
+
+6. EARLY MARKET CLOSE HANDLING
+   Problem: On half-days (e.g., day before Thanksgiving), the market closes
+   at 1:00 PM. A hardcoded 3:55 PM liquidation time would fail.
+   Solution: The bot queries the Alpaca trading calendar API at startup
+   each day to get the actual session close time, and all EOD timing
+   is computed dynamically from the live calendar response.
+
+7. SIMULTANEOUS MULTI-SYMBOL CAPITAL ALLOCATION
+   Problem: If 3 symbols trigger in the same minute, naive sizing would
+   over-allocate capital.
+   Solution: The bot detects simultaneous triggers, fetches current account
+   equity and invested capital in real time, and divides remaining available
+   equity evenly across all triggers before submitting any orders.
+
+8. CONFIGURATION VALIDATION AT STARTUP
+   Problem: A typo in basket_config.json (wrong type, missing key, invalid
+   range) would produce an obscure mid-day crash deep inside order logic.
+   Solution: validate_config() runs once at session start, checks every
+   required key and value constraint for every symbol, and calls sys.exit()
+   with a clear diagnostic message if anything is wrong — before the market
+   opens.
+
+================================================================================
+TECHNOLOGY STACK
+================================================================================
+
+  Python 3              Core language
+  pandas                Bar data manipulation and VWAP computation
+  pytz                  DST-aware timezone handling (US/Eastern)
+  alpaca-trade-api      Brokerage REST API client
+  python-dotenv         Environment variable management
+  requests              Discord webhook notifications
+  PM2                   Process management and auto-restart
+  Oracle Cloud          Cloud hosting (Ubuntu 24.04 ARM)
+  Git / GitHub          Version control (jhodson06/trading)
+
+================================================================================
+QUANTITATIVE CONCEPTS APPLIED
+================================================================================
+
+  - Opening Range Breakout (ORB) momentum strategy
+  - Volume-Weighted Average Price (VWAP) as a directional filter
+  - Relative Volume (RVOL) as a liquidity/activity filter
+  - Average Daily Range (ADR) as a volatility normalisation metric
+  - Fixed fractional position sizing (risk % of equity per trade)
+  - Dynamic take-profit decay (linear interpolation over time)
+  - Reward-to-risk ratio enforcement (configurable per symbol)
+  - Pre-market gap analysis as a session strength filter
+
+================================================================================
+WHAT MAKES THIS PROJECT STAND OUT
+================================================================================
+
+Most algorithmic trading projects on portfolios are backtests — this one is
+live. The engineering effort was concentrated on the gap between a working
+research prototype and a production-grade execution engine that can run
+unattended for months without losing money due to software failure.
+
+The system has been reviewed multiple times against a comprehensive checklist
+of live-trading failure modes (zombie orders, phantom positions, API
+pagination limits, timezone edge cases, early close sessions, duplicate bar
+timestamps, simultaneous trigger race conditions, and more) and has hardened
+defences against each one.
+
+================================================================================
+REPOSITORY
+================================================================================
+
+  GitHub: https://github.com/jhodson06/trading
+  Main script: ORB Algorithm/live_trader.py
+  Backtest engine: ORB Algorithm/backtesting/analyze.py
+
+================================================================================
+AI-DRIVEN DISCOVERIES: CROSS-COMPOUNDING & OPTIMIZATION
+================================================================================
+
+A defining feature of this system's development was the integration of AI pair-
+programming to conduct rigorous backtesting and parameter sensitivity sweeps.
+Rather than relying on static, guessed inputs, the system was subjected to
+vectorized optimization across multiple dimensions (Risk %, Take-Profit Ratios,
+ORB durations, and Time-Decay windows) using parallel processing architectures.
+
+Key insights derived from this iterative process:
+
+  1. ASYMMETRIC REWARD-TO-RISK PROFILING:
+     Through exhaustive sweeps, it was discovered that high-beta equities (like
+     NVDA or MARA) exhibit distinctly different behaviors on Long vs. Short
+     breakouts. The system uses entirely decoupled Long vs. Short TP ratios
+     (e.g., aiming for 3.0:1 on Longs but 1.0:1 on Shorts for highly volatile
+     names) to maximize the win rate and Sharpe ratio on a per-symbol basis.
+
+  2. CROSS-COMPOUNDING PORTFOLIO DYNAMICS:
+     Moving from single-asset standalone backtests to a unified, multi-ticker
+     portfolio engine revealed the sheer power of cross-compounding. Because
+     position sizing dynamically scales as a percentage of the total shared
+     account equity, profits generated by one stock immediately increase the
+     buying power and nominal returns of the next signal on another stock. In
+     simulations, this interconnected equity scaling turned a strong standalone
+     strategy into a robust +650% portfolio return over 3.5 years, drastically
+     outperforming equally weighted Buy & Hold alternatives.
+
+  3. SIMULTANEOUS CAPITAL ALLOCATION:
+     A critical live-trading safeguard developed was the "Equity Splitter." When
+     the market opens highly directional, multiple symbols often trigger their
+     ORB signals in the exact same minute. The engine intercepts these parallel
+     triggers, calculates the remaining available account margin, and perfectly
+     distributes the capital among the active setups to prevent margin calls
+     while maintaining optimal risk exposure.
+
+================================================================================
+END OF PORTFOLIO SUMMARY
+================================================================================

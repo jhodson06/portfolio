@@ -1,6 +1,6 @@
 :root {
   --bg: #121314;
-  --surface: #1b1d20;
+  --surface: #1b1d20CC;
   --ink: #f4f7ef;
   --muted: #b9bdc2;
   --line: #34383d;
@@ -9,8 +9,8 @@
   --gold: #d28e31;
   --clay: #d2765a;
   --steel: #7fa6bf;
-  --band: #181a1d;
-  --dark-band: #0d0e10;
+  --band: #181a1dCC;
+  --dark-band: #0d0e10CC;
   --header-bg: rgba(18, 19, 20, 0.88);
   --header-border: rgba(74, 78, 84, 0.7);
   --tag-bg: #121314;
@@ -23,7 +23,7 @@
 
 :root[data-theme="light"] {
   --bg: #f7f8f4;
-  --surface: #ffffff;
+  --surface: #ffffffCC;
   --ink: #17201b;
   --muted: #5c665f;
   --line: #d8ddd4;
@@ -32,8 +32,8 @@
   --gold: #d28e31;
   --clay: #b85f43;
   --steel: #31526b;
-  --band: #e9eee6;
-  --dark-band: #17201b;
+  --band: #e9eee6CC;
+  --dark-band: #17201bCC;
   --header-bg: rgba(247, 248, 244, 0.88);
   --header-border: rgba(216, 221, 212, 0.8);
   --tag-bg: #fbfcf8;
@@ -56,6 +56,18 @@ body {
   color: var(--ink);
   line-height: 1.6;
   transition: background 180ms ease, color 180ms ease;
+}
+
+/* Canvas Animated Background */
+.animated-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.7;
 }
 
 img {
@@ -409,6 +421,7 @@ a {
   list-style: none;
 }
 
+
 .tag-list li {
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -445,6 +458,12 @@ a {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
 }
+
+.project-grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 24px;
+}
+
 
 .project-grid .project {
   display: flex;
