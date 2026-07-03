@@ -879,14 +879,28 @@ a {
   }
 
   .project-grid,
+  .project-grid.two,
   .process-list,
   .skill-columns,
   .detail-section.two-column,
+  .detail-section.two-column.media-left,
   .reflection-files,
   .video-grid,
   .photo-grid.two,
   .photo-grid.three {
     grid-template-columns: 1fr;
+  }
+
+  #portfolio-widget {
+    padding: 16px !important;
+  }
+  
+  #portfolio-equity {
+    font-size: 1.6rem !important;
+  }
+
+  #portfolio-pl {
+    font-size: 0.85rem !important;
   }
 }
 
