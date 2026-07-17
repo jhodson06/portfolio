@@ -51,6 +51,7 @@ if (bgCanvas) {
   resize();
 
   let techLines = [];
+  let techColors = [];
 
   class TechLine {
     constructor() {
@@ -65,9 +66,13 @@ if (bgCanvas) {
       this.thickness = Math.random() * 1.25 + 0.75;
       this.opacity = Math.random() * 0.35 + 0.30;
       
-      const colors = ['var(--accent)', 'var(--steel)'];
-      this.cssColor = colors[Math.floor(Math.random() * colors.length)];
-      this.colorCache = getComputedStyle(document.documentElement).getPropertyValue(this.cssColor.replace('var(', '').replace(')', '')).trim() || '#ffffff';
+      if (techColors.length === 0) {
+        techColors = [
+          getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#ffffff',
+          getComputedStyle(document.documentElement).getPropertyValue('--steel').trim() || '#ffffff'
+        ];
+      }
+      this.colorCache = techColors[Math.floor(Math.random() * techColors.length)];
     }
 
     draw() {
@@ -94,7 +99,7 @@ if (bgCanvas) {
     }
   }
 
-  const techLineCount = window.innerWidth < 768 ? 30 : 80;
+  const techLineCount = width < 768 ? 30 : 80;
   for (let i = 0; i < techLineCount; i++) {
     techLines.push(new TechLine());
   }
@@ -163,7 +168,7 @@ if (bgCanvas) {
     }
   }
 
-  const flowLineCount = window.innerWidth < 768 ? 60 : 180;
+  const flowLineCount = width < 768 ? 60 : 180;
   for (let i = 0; i < flowLineCount; i++) {
     flowLines.push(new FlowLine());
   }
