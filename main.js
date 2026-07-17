@@ -94,7 +94,8 @@ if (bgCanvas) {
     }
   }
 
-  for (let i = 0; i < 80; i++) {
+  const techLineCount = window.innerWidth < 768 ? 30 : 80;
+  for (let i = 0; i < techLineCount; i++) {
     techLines.push(new TechLine());
   }
 
@@ -162,7 +163,8 @@ if (bgCanvas) {
     }
   }
 
-  for (let i = 0; i < 180; i++) {
+  const flowLineCount = window.innerWidth < 768 ? 60 : 180;
+  for (let i = 0; i < flowLineCount; i++) {
     flowLines.push(new FlowLine());
   }
 
@@ -183,7 +185,12 @@ if (bgCanvas) {
     requestAnimationFrame(animate);
   }
   
-  animate();
+  // Defer animation until after initial page load and paint to improve PageSpeed
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      requestAnimationFrame(animate);
+    }, 100);
+  });
 }
 
 setTheme(savedTheme);
