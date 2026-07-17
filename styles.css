@@ -262,7 +262,7 @@ a {
 
 .primary {
   background: var(--accent);
-  color: #fff;
+  color: var(--bg);
 }
 
 .primary:hover {
