@@ -232,12 +232,20 @@ window.addEventListener("load", () => {
 // Portfolio Widget Logic
 const portfolioWidget = document.getElementById("portfolio-widget");
 if (portfolioWidget) {
-  fetch("portfolio.json")
-    .then(res => {
+  Promise.all([
+    fetch("portfolio.json").then(res => {
       if (!res.ok) throw new Error("Failed to fetch");
       return res.json();
+    }),
+    new Promise(resolve => {
+      if (window.Chart) return resolve();
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/chart.js";
+      script.onload = resolve;
+      document.head.appendChild(script);
     })
-    .then(data => {
+  ])
+    .then(([data]) => {
       const equityFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
       const currentEquity = parseFloat(data.equity);
       const lastEquity = parseFloat(data.last_equity);
@@ -302,12 +310,17 @@ if (portfolioWidget) {
             responsive: true,
             maintainAspectRatio: false,
             interaction: {
-              intersect: false,
               mode: 'index',
+              intersect: false,
             },
             plugins: {
               legend: { display: false },
               tooltip: {
+                backgroundColor: isDark ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)',
+                titleColor: isDark ? '#fff' : '#000',
+                bodyColor: isDark ? '#fff' : '#000',
+                borderColor: gridColor,
+                borderWidth: 1,
                 callbacks: {
                   label: (context) => equityFormatter.format(context.parsed.y)
                 }
