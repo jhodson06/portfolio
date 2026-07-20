@@ -1,9 +1,9 @@
 {
-  "equity": "48759.14",
-  "last_equity": "50811.86",
-  "buying_power": "195036.56",
+  "equity": "48759.11",
+  "last_equity": "48759.11",
+  "buying_power": "195036.44",
   "status": "ACTIVE",
-  "last_updated": "2026-07-17T20:14:59Z",
+  "last_updated": "2026-07-20T20:00:00Z",
   "history": [
     {
       "timestamp": 1783368000,
@@ -43,7 +43,15 @@
     },
     {
       "timestamp": 1784318400,
-      "equity": 48759.14
+      "equity": 50811.86
+    },
+    {
+      "timestamp": 1784404800,
+      "equity": 48759.11
+    },
+    {
+      "timestamp": 1784577600,
+      "equity": 48759.11
     }
   ]
 }
