@@ -267,7 +267,7 @@ if (portfolioWidget) {
         const date = new Date(data.last_updated);
         const timestampElement = document.getElementById("portfolio-timestamp");
         if (timestampElement) {
-          timestampElement.innerText = `Last updated: ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+          timestampElement.innerText = `Last updated: ${date.toLocaleString([], {month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'})}`;
         }
       }
 
