@@ -1,9 +1,9 @@
 {
-  "equity": "48087.08",
+  "equity": "47264.34",
   "last_equity": "48087.08",
-  "buying_power": "192348.32",
+  "buying_power": "189057.36",
   "status": "ACTIVE",
-  "last_updated": "2026-08-03T20:00:00Z",
+  "last_updated": "2026-08-04T20:00:15Z",
   "history": [
     {
       "timestamp": 1783368000,
@@ -88,6 +88,10 @@
     {
       "timestamp": 1785787200,
       "equity": 48087.08
+    },
+    {
+      "timestamp": 1785873600,
+      "equity": 47264.34
     }
   ]
 }
