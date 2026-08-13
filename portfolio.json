@@ -3,46 +3,10 @@
   "last_equity": "47819.87",
   "buying_power": "192540.12",
   "status": "ACTIVE",
-  "last_updated": "2026-08-12T20:00:26Z",
+  "last_updated": "2026-08-13T05:20:40Z",
   "history": [
     {
-      "timestamp": 1719248400,
-      "equity": 23000.0
-    },
-    {
-      "timestamp": 1719334800,
-      "equity": 23200.0
-    },
-    {
-      "timestamp": 1719421200,
-      "equity": 23150.0
-    },
-    {
-      "timestamp": 1719507600,
-      "equity": 23800.0
-    },
-    {
-      "timestamp": 1719594000,
-      "equity": 23950.0
-    },
-    {
-      "timestamp": 1719853200,
-      "equity": 24000.0
-    },
-    {
-      "timestamp": 1719939600,
-      "equity": 24150.75
-    },
-    {
-      "timestamp": 1783296000,
-      "equity": 50000.0
-    },
-    {
       "timestamp": 1783368000,
-      "equity": 50000.0
-    },
-    {
-      "timestamp": 1783382400,
       "equity": 50000.0
     },
     {
@@ -50,15 +14,7 @@
       "equity": 50000.0
     },
     {
-      "timestamp": 1783468800,
-      "equity": 50000.0
-    },
-    {
       "timestamp": 1783540800,
-      "equity": 50471.1
-    },
-    {
-      "timestamp": 1783555200,
       "equity": 50471.1
     },
     {
@@ -66,23 +22,7 @@
       "equity": 50471.1
     },
     {
-      "timestamp": 1783641600,
-      "equity": 50471.1
-    },
-    {
       "timestamp": 1783713600,
-      "equity": 50811.86
-    },
-    {
-      "timestamp": 1783728000,
-      "equity": 50811.86
-    },
-    {
-      "timestamp": 1783800000,
-      "equity": 50811.86
-    },
-    {
-      "timestamp": 1783900800,
       "equity": 50811.86
     },
     {
@@ -90,15 +30,7 @@
       "equity": 50811.86
     },
     {
-      "timestamp": 1783987200,
-      "equity": 50811.86
-    },
-    {
       "timestamp": 1784059200,
-      "equity": 50811.86
-    },
-    {
-      "timestamp": 1784073600,
       "equity": 50811.86
     },
     {
@@ -106,23 +38,11 @@
       "equity": 50811.86
     },
     {
-      "timestamp": 1784160000,
-      "equity": 50811.86
-    },
-    {
       "timestamp": 1784232000,
       "equity": 50811.86
     },
     {
-      "timestamp": 1784246400,
-      "equity": 48759.14
-    },
-    {
       "timestamp": 1784318400,
-      "equity": 48759.11
-    },
-    {
-      "timestamp": 1784404800,
       "equity": 48759.11
     },
     {
@@ -143,10 +63,6 @@
     },
     {
       "timestamp": 1784923200,
-      "equity": 48996.67
-    },
-    {
-      "timestamp": 1785009600,
       "equity": 48996.67
     },
     {
@@ -186,19 +102,7 @@
       "equity": 47025.83
     },
     {
-      "timestamp": 1786132800,
-      "equity": 47820.88
-    },
-    {
-      "timestamp": 1786392000,
-      "equity": 47819.87
-    },
-    {
-      "timestamp": 1786478400,
-      "equity": 47819.87
-    },
-    {
-      "timestamp": 1786564800,
+      "timestamp": 1786651200,
       "equity": 48135.03
     }
   ]
