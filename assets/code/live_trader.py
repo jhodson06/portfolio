@@ -41,11 +41,12 @@ if not logger.handlers:
     logger.addHandler(console_handler)
 
 # --- Configuration & Credentials ---
-# [REDACTED FOR SHOWCASE] 
-# API keys, filesystem paths, and webhook URLs have been removed for public display.
-API_KEY = "REDACTED"
-SECRET_KEY = "REDACTED"
-BASE_URL = "REDACTED"
+API_KEY = os.getenv("ALPACA_API_KEY")
+SECRET_KEY = os.getenv("ALPACA_SECRET_KEY")
+BASE_URL = os.getenv("ALPACA_BASE_URL", "https://paper-api.alpaca.markets")
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
+PORTFOLIO_REPO_PATH = os.getenv("PORTFOLIO_REPO_PATH")
+PORTFOLIO_START_DATE = os.getenv("PORTFOLIO_START_DATE")
 
 # Run options
 # Pull from env so deployments never accidentally run live with a stale hardcoded value.
@@ -99,7 +100,7 @@ REQUIRED_CONFIG_KEYS = [
     "ORB_MINUTES", "CUTOFF_MINUTES",
     "TARGET_DECAY_START_HOUR", "TARGET_DECAY_START_MINUTE",
     "TARGET_DECAY_END_HOUR", "TARGET_DECAY_END_MINUTE",
-    "FILTER_A", "FILTER_B", "FILTER_C",
+    "MIN_GAP_PERCENT", "MIN_RVOL", "MIN_ADR_PERCENT",
 ]
 
 # Matches the ticker basket filter analyze_basket.py uses.
@@ -140,7 +141,12 @@ except ImportError:
 # --- Notifications ---
 def send_notification(msg: str):
     logger.info(f"Notification: {msg}")
-    # [REDACTED FOR SHOWCASE] Discord Webhook integration logic removed.
+    if not DISCORD_WEBHOOK_URL:
+        return
+    try:
+        requests.post(DISCORD_WEBHOOK_URL, json={"content": msg}, timeout=5)
+    except Exception as e:
+        logger.error(f"Failed to send Discord alert: {e}")
 
 
 # --- Config Validation ---
@@ -167,6 +173,10 @@ def validate_config(basket_config: dict, symbols: list):
             problems.append(f"{sym} ORB_MINUTES must be greater than 0")
         if cfg["CUTOFF_MINUTES"] <= cfg["ORB_MINUTES"]:
             problems.append(f"{sym} CUTOFF_MINUTES must be greater than ORB_MINUTES")
+        if cfg["MIN_RVOL"] < 0:
+            problems.append(f"{sym} MIN_RVOL must be non-negative")
+        if cfg["MIN_ADR_PERCENT"] < 0:
+            problems.append(f"{sym} MIN_ADR_PERCENT must be non-negative")
             
         start_min = cfg["TARGET_DECAY_START_HOUR"] * 60 + cfg["TARGET_DECAY_START_MINUTE"]
         end_min = cfg["TARGET_DECAY_END_HOUR"] * 60 + cfg["TARGET_DECAY_END_MINUTE"]
@@ -263,9 +273,134 @@ def push_portfolio_update(api: "tradeapi.REST"):
     the required schema, writes it to the local frontend portfolio repo, and
     pushes the changes via Git. This runs at the end of every trading day.
     """
-    # [REDACTED FOR SHOWCASE]
-    # Automated GitHub integration and local filesystem paths have been removed.
-    pass
+    if not PORTFOLIO_REPO_PATH:
+        logger.info("PORTFOLIO_REPO_PATH not set in .env. Skipping portfolio push.")
+        return
+
+    if not os.path.isdir(PORTFOLIO_REPO_PATH):
+        logger.error(f"PORTFOLIO_REPO_PATH '{PORTFOLIO_REPO_PATH}' is not a valid directory.")
+        return
+
+    try:
+        # 1. Fetch live data
+        account = api.get_account()
+        
+        # Always query 1A to ensure we get data up to today. 
+        # Using date_start with Alpaca truncates the response to 1M from the start date, losing recent data.
+        hist = api.get_portfolio_history(period="1A", timeframe="1D")
+        
+        ny_tz = pytz.timezone("America/New_York")
+        daily_equity = {}
+
+        # Alpaca's daily portfolio history timestamps correspond to 20:00 (8:00 PM) New York time of each trading day.
+        # Converting timestamps using America/New_York gives the exact calendar date of each trading day,
+        # robustly handling Daylight Saving Time (EDT/EST) transitions without second-offset drift.
+        if hasattr(hist, "timestamp") and hasattr(hist, "equity"):
+            for t, e in zip(hist.timestamp, hist.equity):
+                if e is not None:
+                    dt_ny = datetime.fromtimestamp(t, pytz.utc).astimezone(ny_tz)
+                    daily_equity[dt_ny.date()] = float(e)
+
+        # Include today's live closing equity if today is a weekday
+        today_ny = datetime.now(ny_tz).date()
+        if today_ny.weekday() < 5 and account.equity is not None:
+            daily_equity[today_ny] = float(account.equity)
+
+        # Determine start date
+        if PORTFOLIO_START_DATE:
+            start_date = datetime.strptime(PORTFOLIO_START_DATE, "%Y-%m-%d").date()
+        elif daily_equity:
+            start_date = min(daily_equity.keys())
+        else:
+            start_date = today_ny
+
+        end_date = max(daily_equity.keys()) if daily_equity else today_ny
+
+        # Determine baseline equity prior to start_date for gap-padding
+        last_known_eq = 50000.0
+        dates_before = [d for d in daily_equity.keys() if d < start_date]
+        if dates_before:
+            last_known_eq = daily_equity[max(dates_before)]
+        elif start_date in daily_equity:
+            last_known_eq = daily_equity[start_date]
+        elif daily_equity:
+            last_known_eq = daily_equity[min(daily_equity.keys())]
+
+        # Fill any missing weekdays (e.g. market holidays or zero-trade days dropped by Alpaca)
+        # Using calendar day stepping prevents integer second mismatch across DST boundaries.
+        history_points = []
+        curr_date = start_date
+        while curr_date <= end_date:
+            if curr_date.weekday() < 5:  # Monday to Friday
+                if curr_date in daily_equity:
+                    last_known_eq = daily_equity[curr_date]
+                ts = int(pytz.utc.localize(datetime(curr_date.year, curr_date.month, curr_date.day, 20, 0, 0)).timestamp())
+                history_points.append({"timestamp": ts, "equity": last_known_eq})
+            curr_date += timedelta(days=1)
+        
+        # 2. Format to required schema
+        portfolio_data = {
+            "equity": str(account.equity),
+            "last_equity": str(account.last_equity),
+            "buying_power": str(account.buying_power),
+            "status": str(account.status),
+            "last_updated": datetime.now(pytz.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "history": history_points
+        }
+        
+        # 3. Pull latest changes from remote to avoid push rejections
+        try:
+            subprocess.run(
+                ["git", "pull", "--rebase"],
+                cwd=PORTFOLIO_REPO_PATH, check=True, capture_output=True, text=True
+            )
+        except subprocess.CalledProcessError as e:
+            logger.warning(f"Git pull failed (possibly no remote updates or network issue): {e.stderr.strip()}")
+
+        # 4. Write to portfolio.json in the target repo
+        portfolio_file = os.path.join(PORTFOLIO_REPO_PATH, "portfolio.json")
+        with open(portfolio_file, "w") as f:
+            json.dump(portfolio_data, f, indent=2)
+            
+        logger.info(f"Wrote updated portfolio data to {portfolio_file}")
+
+
+        # 4. Git add, commit, push
+        # Use run with check=True to raise CalledProcessError on failure
+        # Capture output so it doesn't clutter the main console unless it fails
+        subprocess.run(
+            ["git", "add", "portfolio.json"], 
+            cwd=PORTFOLIO_REPO_PATH, check=True, capture_output=True, text=True
+        )
+        
+        # If there are no changes, git commit will return a non-zero exit code.
+        # We handle this by checking status first or catching the exception.
+        status_proc = subprocess.run(
+            ["git", "status", "--porcelain"],
+            cwd=PORTFOLIO_REPO_PATH, check=True, capture_output=True, text=True
+        )
+        
+        if not status_proc.stdout.strip():
+            logger.info("No changes to portfolio.json. Skipping git commit/push.")
+            return
+
+        subprocess.run(
+            ["git", "commit", "-m", "Auto-update portfolio data"],
+            cwd=PORTFOLIO_REPO_PATH, check=True, capture_output=True, text=True
+        )
+        
+        subprocess.run(
+            ["git", "push"],
+            cwd=PORTFOLIO_REPO_PATH, check=True, capture_output=True, text=True
+        )
+        
+        logger.info("Successfully pushed portfolio.json to remote repository.")
+        send_notification("📈 Successfully updated and pushed frontend Live Portfolio widget.")
+
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Git operation failed during portfolio push: {e.stderr}")
+    except Exception as e:
+        logger.error(f"Failed to push portfolio update: {e}", exc_info=True)
 
 
 # --- State Management & Crash Recovery ---
@@ -356,24 +491,87 @@ def reconstruct_state_from_alpaca(api: "tradeapi.REST", symbols: list, state: di
 # --- Pre-Market Baseline Fetcher ---
 def fetch_premarket_metrics(api: "tradeapi.REST", symbols: list, basket_config: dict) -> dict:
     """
-    [REDACTED FOR SHOWCASE]
-    Computes each symbol's pre-market baseline metrics used for later filtering.
-    Specific data points (such as relative volume calculations, average daily ranges, etc) 
-    have been removed to protect the proprietary trading logic.
+    Computes each symbol's 10-day ADR, previous close, and 10-day average
+    ORB-window volume.
+
+    FIX (critical): the previous implementation built the ORB-volume
+    lookback's end time via `day.date + timedelta(minutes=X)`. `day.date`
+    is a plain `datetime.date`; adding a sub-day timedelta to a `date` is
+    a silent no-op in Python (only the whole-day component applies), so
+    end_time collapsed to midnight every time. start > end on every
+    request -> every request returned 0 bars -> avg_orb_volume fell back
+    to its 1.0 default for every symbol -> RVOL became (raw share volume
+    in the ORB window) / 1.0, so MIN_RVOL never actually filtered.
+
+    FIX (critical): request windows were built with a hardcoded "-05:00"
+    UTC offset, correct only for EST. For ~8 months/year (EDT) this
+    silently requested the wrong hour of bars -- the same class of bug
+    analyze_basket.py documents fixing with pytz.localize().
+
+    OPTIMIZATION: pulls each symbol's whole lookback window in a single
+    minute-bar API call and groups by date locally (mirrors how
+    analyze_basket.py derives avg_orb_vol from one DataFrame), instead of
+    one API call per lookback day per symbol.
     """
     metrics = {}
+    lookback_start = (datetime.now(EST) - timedelta(days=40)).strftime("%Y-%m-%d")
+    lookback_start_min = (datetime.now(EST) - timedelta(days=20)).strftime("%Y-%m-%d")
+    lookback_end = (datetime.now(EST) - timedelta(days=1)).replace(hour=23, minute=59, second=59, microsecond=0).isoformat()
+
     for sym in symbols:
         try:
             orb_minutes_val = int(basket_config.get(sym, {}).get("ORB_MINUTES", 15))
-            
-            # [BASELINE CALCULATION REDACTED]
-            # Real script fetches daily and minute bars to build historical baselines.
+
+            # 1. Daily bars -> ADR + previous close
+            daily_bars = api.get_bars(
+                sym, tradeapi.TimeFrame.Day,
+                start=lookback_start, end=lookback_end,
+                adjustment="all", feed=DATA_FEED,
+            ).df
+
+            if daily_bars.empty or len(daily_bars) < 10:
+                logger.warning(f"[{sym}] Insufficient daily data for ADR. Skipping.")
+                continue
+
+            daily_ranges = daily_bars["high"] - daily_bars["low"]
+            adr = float(daily_ranges.tail(10).mean())
+            prev_close = float(daily_bars["close"].iloc[-1])
+
+            # 2. One minute-bar pull for the whole lookback window, then
+            #    group by date locally to get each day's ORB-window volume.
+            minute_bars = api.get_bars(
+                sym, tradeapi.TimeFrame.Minute,
+                start=lookback_start_min, end=lookback_end,
+                adjustment="all", feed=DATA_FEED,
+            ).df
+
+            # Default to 0.0 (fail-closed): a missing baseline produces RVOL = 0.0,
+            # which correctly fails the MIN_RVOL filter rather than inflating to 500k+.
+            avg_orb_vol = 0.0
+            if not minute_bars.empty:
+                minute_bars.index = pd.to_datetime(minute_bars.index).tz_convert(EST)
+                minutes_since_midnight = minute_bars.index.hour * 60 + minute_bars.index.minute
+                market_open_minutes = 9 * 60 + 30
+                target_minutes = market_open_minutes + orb_minutes_val
+                orb_window = minute_bars[
+                    (minutes_since_midnight >= market_open_minutes) & (minutes_since_midnight < target_minutes)
+                ]
+                if not orb_window.empty:
+                    daily_orb_vol = orb_window.groupby(orb_window.index.date)["volume"].sum()
+                    recent = daily_orb_vol.tail(10)
+                    if len(recent) > 0 and recent.mean() > 0:
+                        avg_orb_vol = float(recent.mean())
+
             metrics[sym] = {
+                "ADR": adr,
+                "prev_close": prev_close,
+                "avg_orb_volume": avg_orb_vol,
                 "orb_minutes": orb_minutes_val,
-                # "FILTER_A_BASELINE": ...,
-                # "FILTER_B_BASELINE": ...
             }
-            logger.info(f"[{sym}] Pre-market baseline loaded (Redacted).")
+            logger.info(
+                f"[{sym}] Pre-market baseline loaded. ADR: ${adr:.2f}, "
+                f"Prev Close: ${prev_close:.2f}, Avg ORB Vol: {avg_orb_vol:,.0f}"
+            )
 
         except Exception as e:
             logger.error(f"Failed to fetch pre-market metrics for {sym}: {e}")
@@ -670,18 +868,136 @@ def run_intraday_checks(api: "tradeapi.REST", symbols: list, config: dict, basel
             logger.error(f"Error fetching ORB bounds for {sym}: {e}")
 
     # 2. Check for breakout entries.
+    #
+    # Compute cumulative session VWAP and verify VWAP filters to align with backtest
     triggers = []
     for sym in symbols:
         if sym not in state["orb_bounds"] or sym in state["trades"] or sym not in baselines:
             continue
-            
-        # [ALPHA REDACTED FOR SHOWCASE]
-        # Proprietary trade entry logic, including specific mathematical indicators, 
-        # market filters, and asymmetric long/short breakout filtering have been 
-        # removed from this public file.
-        
-        # In the real script, `triggers` is appended with validated breakout signals.
-        pass
+
+        bounds = state["orb_bounds"][sym]
+        cfg = config.get(sym)
+        if cfg is None:
+            continue
+        entry_cutoff_dt = market_open_dt + timedelta(minutes=cfg["CUTOFF_MINUTES"])
+        orb_cutoff_dt = market_open_dt + timedelta(minutes=cfg["ORB_MINUTES"])
+
+        try:
+            bars_df = api.get_bars(
+                sym, tradeapi.TimeFrame.Minute,
+                start=market_open_dt.isoformat(),
+                adjustment="all", feed=DATA_FEED,
+            ).df
+            if bars_df.empty:
+                continue
+
+            bars_df.index = pd.to_datetime(bars_df.index).tz_convert(EST)
+            bars_df = bars_df[~bars_df.index.duplicated(keep="last")]  # Guard against duplicate timestamps from IEX feed
+            completed_bars = bars_df[bars_df.index < current_minute]
+            if completed_bars.empty:
+                continue
+
+            # Cumulative session VWAP through each completed bar.
+            vol_price = completed_bars["close"] * completed_bars["volume"]
+            cum_vol = completed_bars["volume"].cumsum()
+            session_vwap = vol_price.cumsum() / cum_vol
+
+            # Only evaluate bars not already looked at, in chronological
+            # order -- so a burst of >1 new bar (e.g. after a slow poll
+            # cycle) is still checked bar-by-bar instead of only on the
+            # freshest one, matching the backtest's minute-by-minute
+            # evaluation.
+            progress = state["sym_progress"].setdefault(sym, {"last_checked_bar": None})
+            last_checked = progress["last_checked_bar"]
+            if last_checked:
+                new_bars = completed_bars[completed_bars.index > pd.Timestamp(last_checked).tz_convert(EST)]
+            else:
+                new_bars = completed_bars[completed_bars.index >= orb_cutoff_dt]
+
+            decision_made = False
+            for ts, row in new_bars.iterrows():
+                progress["last_checked_bar"] = ts.isoformat()
+
+                if ts > entry_cutoff_dt:
+                    continue  # past the entry window; keep advancing progress, don't evaluate
+
+                close_price = float(row["close"])
+                cur_vwap = float(session_vwap.loc[ts])
+
+                is_long_breakout = close_price > bounds["high"] and close_price > cur_vwap
+                is_short_breakout = close_price < bounds["low"] and close_price < cur_vwap
+
+                if not (is_long_breakout or is_short_breakout):
+                    continue
+
+                # --- Filters (same order as analyze_basket.py) ---
+                prev_close = baselines[sym]["prev_close"]
+                if not prev_close:
+                    state["trades"][sym] = {"status": "SKIPPED", "reason": "prev_close is zero (bad data)"}
+                    logger.warning(f"[{sym}] prev_close is 0 — skipping to avoid division by zero.")
+                    decision_made = True
+                    break
+                open_gap = abs(bounds["today_open"] - prev_close) / prev_close
+                if open_gap < cfg["MIN_GAP_PERCENT"]:
+                    state["trades"][sym] = {"status": "SKIPPED", "reason": f"Gap {open_gap:.4f} < Min {cfg['MIN_GAP_PERCENT']}"}
+                    logger.info(f"[{sym}] Filter failed: Gap {open_gap:.2%} below min.")
+                    decision_made = True
+                    break
+
+                if bounds["rvol"] < cfg["MIN_RVOL"]:
+                    state["trades"][sym] = {"status": "SKIPPED", "reason": f"RVOL {bounds['rvol']:.2f} < Min {cfg['MIN_RVOL']}"}
+                    logger.info(f"[{sym}] Filter failed: RVOL {bounds['rvol']:.2f} below min.")
+                    decision_made = True
+                    break
+
+                adr = baselines[sym]["ADR"]
+                orb_range = bounds["high"] - bounds["low"]
+                if orb_range < adr * cfg["MIN_ADR_PERCENT"]:
+                    state["trades"][sym] = {
+                        "status": "SKIPPED",
+                        "reason": f"Range {orb_range:.2f} < Min ADR size {adr * cfg['MIN_ADR_PERCENT']:.2f}",
+                    }
+                    logger.info(
+                        f"[{sym}] Filter failed: ORB Range ${orb_range:.2f} below target ADR size "
+                        f"${adr * cfg['MIN_ADR_PERCENT']:.2f}."
+                    )
+                    decision_made = True
+                    break
+
+                side = "long" if is_long_breakout else "short"
+
+                # Estimate entry fill with slippage, stop is placed at the exact ORB high/low level
+                if side == "long":
+                    est_entry = close_price * (1 + SLIPPAGE_PCT)
+                    sl_price = bounds["low"]
+                else:
+                    est_entry = close_price * (1 - SLIPPAGE_PCT)
+                    sl_price = bounds["high"]
+
+                risk_per_share = abs(est_entry - sl_price)
+                if risk_per_share <= MIN_RISK_THRESHOLD:
+                    state["trades"][sym] = {
+                        "status": "SKIPPED",
+                        "reason": f"Risk/share ${risk_per_share:.2f} <= min ${MIN_RISK_THRESHOLD:.2f}",
+                    }
+                    logger.info(f"[{sym}] Filter failed: risk/share ${risk_per_share:.2f} too small (noise-level breakout).")
+                    decision_made = True
+                    break
+
+                triggers.append({
+                    "sym": sym, "side": side, "trigger_price": close_price,
+                    "est_entry": est_entry, "sl_price": sl_price,
+                    "risk_per_share": risk_per_share, "cfg": cfg,
+                })
+                decision_made = True
+                break
+
+            if not decision_made and now >= entry_cutoff_dt and sym not in state["trades"]:
+                state["trades"][sym] = {"status": "SKIPPED", "reason": "Cutoff reached"}
+                logger.info(f"[{sym}] Entry window closed (cutoff reached). Skipping.")
+
+        except Exception as e:
+            logger.error(f"Error checking breakout for {sym}: {e}")
 
     # 3. Process simultaneous triggers with capital constraint limits.
     if triggers:
