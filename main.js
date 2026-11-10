@@ -26,9 +26,11 @@ function setTheme(theme) {
 
     window.portfolioChart.data.datasets[0].borderColor = accentColor;
     window.portfolioChart.data.datasets[0].pointBackgroundColor = accentColor;
+    // dataset[1] is the S&P 500 benchmark — keep its color fixed
     window.portfolioChart.options.scales.x.ticks.color = textColor;
     window.portfolioChart.options.scales.y.grid.color = gridColor;
     window.portfolioChart.options.scales.y.ticks.color = textColor;
+    window.portfolioChart.options.plugins.legend.labels.color = textColor;
     window.portfolioChart.update();
   }
 }
@@ -280,9 +282,8 @@ if (portfolioWidget) {
         const isDark = root.dataset.theme === "dark" || (!root.dataset.theme && savedTheme === "dark");
         const gridColor = isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)";
         const textColor = isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)";
-        
-        // Use computed value for accent color
         const accentColor = getComputedStyle(root).getPropertyValue("--accent").trim() || "#22c55e";
+        const snpColor = "#6ea8fe"; // fixed blue, readable in both themes
 
         const labels = data.history.map(point => {
           const date = new Date(point.timestamp * 1000);
@@ -290,21 +291,38 @@ if (portfolioWidget) {
         });
         const chartData = data.history.map(point => point.equity);
 
+        // Build the chart immediately with portfolio data, then layer in S&P 500
         window.portfolioChart = new Chart(ctx, {
           type: 'line',
           data: {
             labels: labels,
-            datasets: [{
-              label: 'Equity',
-              data: chartData,
-              borderColor: accentColor,
-              borderWidth: 2,
-              pointRadius: 0,
-              pointHoverRadius: 4,
-              pointBackgroundColor: accentColor,
-              fill: false,
-              tension: 0.1
-            }]
+            datasets: [
+              {
+                label: 'My Portfolio',
+                data: chartData,
+                borderColor: accentColor,
+                borderWidth: 2,
+                pointRadius: 0,
+                pointHoverRadius: 4,
+                pointBackgroundColor: accentColor,
+                fill: false,
+                tension: 0.1,
+                order: 1
+              },
+              {
+                label: 'S&P 500 (scaled)',
+                data: new Array(chartData.length).fill(null), // placeholder until fetched
+                borderColor: snpColor,
+                borderWidth: 2,
+                borderDash: [5, 4],
+                pointRadius: 0,
+                pointHoverRadius: 4,
+                pointBackgroundColor: snpColor,
+                fill: false,
+                tension: 0.1,
+                order: 2
+              }
+            ]
           },
           options: {
             responsive: true,
@@ -314,15 +332,29 @@ if (portfolioWidget) {
               intersect: false,
             },
             plugins: {
-              legend: { display: false },
+              legend: {
+                display: true,
+                labels: {
+                  color: textColor,
+                  boxWidth: 24,
+                  boxHeight: 2,
+                  padding: 16,
+                  font: { size: 12, weight: '600' },
+                  usePointStyle: false
+                }
+              },
               tooltip: {
-                backgroundColor: isDark ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)',
+                backgroundColor: isDark ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.9)',
                 titleColor: isDark ? '#fff' : '#000',
-                bodyColor: isDark ? '#fff' : '#000',
+                bodyColor: isDark ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.75)',
                 borderColor: gridColor,
                 borderWidth: 1,
                 callbacks: {
-                  label: (context) => equityFormatter.format(context.parsed.y)
+                  label: (context) => {
+                    const val = context.parsed.y;
+                    if (val == null) return null;
+                    return `${context.dataset.label}: ${equityFormatter.format(val)}`;
+                  }
                 }
               }
             },
@@ -339,12 +371,54 @@ if (portfolioWidget) {
                 grid: { color: gridColor, drawBorder: false },
                 ticks: {
                   color: textColor,
-                  callback: (value) => '$' + (value / 1000) + 'k'
+                  callback: (value) => '$' + (value / 1000).toFixed(0) + 'k'
                 }
               }
             }
           }
         });
+
+        // Fetch S&P 500 data from Yahoo Finance and overlay it
+        const startTs = data.history[0].timestamp;
+        const endTs = data.history[data.history.length - 1].timestamp + 86400;
+        const snpUrl = `https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?interval=1d&period1=${startTs}&period2=${endTs}&events=history`;
+
+        fetch(snpUrl)
+          .then(res => res.json())
+          .then(json => {
+            const result = json?.chart?.result?.[0];
+            if (!result) return;
+
+            const snpTimestamps = result.timestamp;
+            const snpCloses = result.indicators.quote[0].close;
+
+            // Build a lookup: date string -> close price
+            const snpByDate = {};
+            snpTimestamps.forEach((ts, i) => {
+              if (snpCloses[i] == null) return;
+              const dateStr = new Date(ts * 1000).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+              snpByDate[dateStr] = snpCloses[i];
+            });
+
+            // Find the first S&P close that aligns with our portfolio start
+            const firstSnpClose = snpByDate[labels[0]] || Object.values(snpByDate)[0];
+            if (!firstSnpClose) return;
+
+            const scaleFactor = 50000 / firstSnpClose;
+
+            // Map each portfolio label to a scaled S&P value (null if market was closed that day)
+            const snpScaled = labels.map(label => {
+              const close = snpByDate[label];
+              return close != null ? parseFloat((close * scaleFactor).toFixed(2)) : null;
+            });
+
+            window.portfolioChart.data.datasets[1].data = snpScaled;
+            window.portfolioChart.update();
+          })
+          .catch(() => {
+            // Silently fail — chart still works without the benchmark line
+          });
+
       } else if (canvas) {
         // If history is empty, hide the canvas container
         canvas.parentElement.style.display = "none";
