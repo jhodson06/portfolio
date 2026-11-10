@@ -82,8 +82,13 @@
         <div style="flex: 1; width: 100%; position: relative; min-height: 0; margin-top: 14px;">
           <canvas id="portfolio-chart"></canvas>
         </div>
-        <div style="font-size: 0.75rem; color: var(--muted); margin-top: 10px; text-align: right;"
-          id="portfolio-timestamp">Last updated: ...</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--muted); margin-top: 10px; line-height: 1;">
+          <div id="portfolio-legend" style="display: flex; gap: 12px; align-items: center;">
+            <b style="color: var(--accent); font-weight: 600;">My Portfolio</b>
+            <b style="color: var(--snp); font-weight: 600;">S&amp;P 500</b>
+          </div>
+          <div id="portfolio-timestamp">Last updated: ...</div>
+        </div>
       </div>
     </section>
 

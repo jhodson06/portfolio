@@ -268,14 +268,12 @@ if (portfolioWidget) {
       plElement.innerText = `${sign}${equityFormatter.format(change)} (${sign}${changePct.toFixed(2)}%) Today`;
       plElement.style.color = color;
 
-      const timestampElement = document.getElementById("portfolio-timestamp");
-      if (timestampElement) {
-        let timeStr = "";
-        if (data.last_updated) {
-          const date = new Date(data.last_updated);
-          timeStr = `Last updated: ${date.toLocaleString([], {month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'})} &nbsp;•&nbsp; `;
+      if (data.last_updated) {
+        const date = new Date(data.last_updated);
+        const timestampElement = document.getElementById("portfolio-timestamp");
+        if (timestampElement) {
+          timestampElement.innerText = `Last updated: ${date.toLocaleString([], {month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'})}`;
         }
-        timestampElement.innerHTML = `${timeStr}<b style="color: var(--accent); font-weight: 600;">My Portfolio</b> &nbsp; <b style="color: var(--snp); font-weight: 600;">S&amp;P 500</b>`;
       }
 
       portfolioWidget.style.display = "flex";
