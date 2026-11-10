@@ -370,14 +370,6 @@ if (portfolioWidget) {
           }
         });
 
-        // Inject colored-text legend into bottom bar (no swatches, zero extra height)
-        const legendEl = document.getElementById("portfolio-legend");
-        if (legendEl) {
-          legendEl.innerHTML =
-            `<span style="font-size:0.72rem;font-weight:700;color:${accentColor};">My Portfolio</span>` +
-            `<span style="font-size:0.72rem;font-weight:700;color:${snpColor};">S&amp;P 500</span>`;
-        }
-
         // Overlay S&P 500 benchmark from pre-computed snp_history in portfolio.json
         if (data.snp_history && data.snp_history.length > 0) {
           // Build a lookup: midnight-UTC timestamp -> scaled equity
