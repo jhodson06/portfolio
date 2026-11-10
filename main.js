@@ -30,7 +30,6 @@ function setTheme(theme) {
     window.portfolioChart.options.scales.x.ticks.color = textColor;
     window.portfolioChart.options.scales.y.grid.color = gridColor;
     window.portfolioChart.options.scales.y.ticks.color = textColor;
-    window.portfolioChart.options.plugins.legend.labels.color = textColor;
     window.portfolioChart.update();
   }
 }
@@ -334,15 +333,7 @@ if (portfolioWidget) {
             },
             plugins: {
               legend: {
-                display: true,
-                labels: {
-                  color: textColor,
-                  boxWidth: 24,
-                  boxHeight: 2,
-                  padding: 16,
-                  font: { size: 12, weight: '600' },
-                  usePointStyle: false
-                }
+                display: false
               },
               tooltip: {
                 backgroundColor: isDark ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.9)',
@@ -378,6 +369,14 @@ if (portfolioWidget) {
             }
           }
         });
+
+        // Inject colored-text legend into bottom bar (no swatches, zero extra height)
+        const legendEl = document.getElementById("portfolio-legend");
+        if (legendEl) {
+          legendEl.innerHTML =
+            `<span style="font-size:0.72rem;font-weight:700;color:${accentColor};">My Portfolio</span>` +
+            `<span style="font-size:0.72rem;font-weight:700;color:${snpColor};">S&amp;P 500</span>`;
+        }
 
         // Overlay S&P 500 benchmark from pre-computed snp_history in portfolio.json
         if (data.snp_history && data.snp_history.length > 0) {
