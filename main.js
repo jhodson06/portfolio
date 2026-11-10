@@ -30,7 +30,6 @@ function setTheme(theme) {
     window.portfolioChart.options.scales.x.ticks.color = textColor;
     window.portfolioChart.options.scales.y.grid.color = gridColor;
     window.portfolioChart.options.scales.y.ticks.color = textColor;
-    window.portfolioChart.options.plugins.legend.labels.color = textColor;
     window.portfolioChart.update();
   }
 }
@@ -310,16 +309,17 @@ if (portfolioWidget) {
                 order: 1
               },
               {
-                label: 'S&P 500 (scaled)',
+                label: 'S&P 500',
                 data: new Array(chartData.length).fill(null), // placeholder until fetched
                 borderColor: snpColor,
-                borderWidth: 2,
+                borderWidth: 1.5,
                 borderDash: [5, 4],
                 pointRadius: 0,
                 pointHoverRadius: 4,
                 pointBackgroundColor: snpColor,
                 fill: false,
                 tension: 0.1,
+                spanGaps: true,
                 order: 2
               }
             ]
@@ -333,15 +333,7 @@ if (portfolioWidget) {
             },
             plugins: {
               legend: {
-                display: true,
-                labels: {
-                  color: textColor,
-                  boxWidth: 24,
-                  boxHeight: 2,
-                  padding: 16,
-                  font: { size: 12, weight: '600' },
-                  usePointStyle: false
-                }
+                display: false
               },
               tooltip: {
                 backgroundColor: isDark ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.9)',
@@ -377,6 +369,20 @@ if (portfolioWidget) {
             }
           }
         });
+
+        // Inject custom HTML legend into the bottom bar (same row as timestamp)
+        const legendEl = document.getElementById("portfolio-legend");
+        if (legendEl) {
+          legendEl.innerHTML = `
+            <span style="display:flex;align-items:center;gap:5px;font-size:0.72rem;font-weight:700;color:var(--muted);">
+              <span style="display:inline-block;width:18px;height:2px;background:${accentColor};border-radius:2px;"></span>
+              My Portfolio
+            </span>
+            <span style="display:flex;align-items:center;gap:5px;font-size:0.72rem;font-weight:700;color:var(--muted);">
+              <span style="display:inline-block;width:18px;height:0;border-top:1.5px dashed ${snpColor};"></span>
+              S&amp;P 500
+            </span>`;
+        }
 
         // Overlay S&P 500 benchmark from pre-computed snp_history in portfolio.json
         if (data.snp_history && data.snp_history.length > 0) {
