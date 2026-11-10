@@ -378,46 +378,22 @@ if (portfolioWidget) {
           }
         });
 
-        // Fetch S&P 500 data from Yahoo Finance and overlay it
-        const startTs = data.history[0].timestamp;
-        const endTs = data.history[data.history.length - 1].timestamp + 86400;
-        const snpUrl = `https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?interval=1d&period1=${startTs}&period2=${endTs}&events=history`;
+        // Overlay S&P 500 benchmark from pre-computed snp_history in portfolio.json
+        if (data.snp_history && data.snp_history.length > 0) {
+          // Build a lookup: midnight-UTC timestamp -> scaled equity
+          const snpByTs = {};
+          data.snp_history.forEach(p => { snpByTs[p.timestamp] = p.equity; });
 
-        fetch(snpUrl)
-          .then(res => res.json())
-          .then(json => {
-            const result = json?.chart?.result?.[0];
-            if (!result) return;
-
-            const snpTimestamps = result.timestamp;
-            const snpCloses = result.indicators.quote[0].close;
-
-            // Build a lookup: date string -> close price
-            const snpByDate = {};
-            snpTimestamps.forEach((ts, i) => {
-              if (snpCloses[i] == null) return;
-              const dateStr = new Date(ts * 1000).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-              snpByDate[dateStr] = snpCloses[i];
-            });
-
-            // Find the first S&P close that aligns with our portfolio start
-            const firstSnpClose = snpByDate[labels[0]] || Object.values(snpByDate)[0];
-            if (!firstSnpClose) return;
-
-            const scaleFactor = 50000 / firstSnpClose;
-
-            // Map each portfolio label to a scaled S&P value (null if market was closed that day)
-            const snpScaled = labels.map(label => {
-              const close = snpByDate[label];
-              return close != null ? parseFloat((close * scaleFactor).toFixed(2)) : null;
-            });
-
-            window.portfolioChart.data.datasets[1].data = snpScaled;
-            window.portfolioChart.update();
-          })
-          .catch(() => {
-            // Silently fail — chart still works without the benchmark line
+          // For each portfolio label, find the closest S&P date (normalise to midnight UTC)
+          const snpScaled = data.history.map(point => {
+            // Portfolio timestamps are at 20:00 UTC; S&P ones are at 00:00 UTC same calendar day
+            const dayMidnight = point.timestamp - (point.timestamp % 86400);
+            return snpByTs[dayMidnight] ?? null;
           });
+
+          window.portfolioChart.data.datasets[1].data = snpScaled;
+          window.portfolioChart.update();
+        }
 
       } else if (canvas) {
         // If history is empty, hide the canvas container

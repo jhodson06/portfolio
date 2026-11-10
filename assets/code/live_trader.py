@@ -267,6 +267,48 @@ def _parse_calendar_time(value, fallback: dt_time) -> dt_time:
 
 
 # --- Portfolio Integration ---
+def fetch_snp_history(history_points: list, initial_investment: float = 50_000.0) -> list:
+    """
+    Fetch daily S&P 500 (^GSPC) closes from Yahoo Finance for the same date
+    range as history_points and scale them so the first close == initial_investment.
+    Returns a list of {"timestamp": <midnight-UTC int>, "equity": <float>} dicts.
+    Falls back to an empty list on any network or parse error.
+    """
+    if not history_points:
+        return []
+    try:
+        start_ts = history_points[0]["timestamp"]
+        end_ts   = history_points[-1]["timestamp"] + 86_400
+        url = (
+            f"https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC"
+            f"?interval=1d&period1={start_ts}&period2={end_ts}&events=history"
+        )
+        resp = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+        resp.raise_for_status()
+        result = resp.json()["chart"]["result"][0]
+        timestamps = result["timestamp"]
+        closes     = result["indicators"]["quote"][0]["close"]
+
+        raw = [(t, c) for t, c in zip(timestamps, closes) if c is not None]
+        if not raw:
+            return []
+
+        first_close = raw[0][1]
+        scale = initial_investment / first_close
+
+        snp_history = []
+        for ts, close in raw:
+            # Normalise to midnight UTC of that calendar day
+            midnight = ts - (ts % 86_400)
+            snp_history.append({"timestamp": midnight, "equity": round(close * scale, 2)})
+
+        logger.info(f"Fetched {len(snp_history)} S&P 500 data points for portfolio.json.")
+        return snp_history
+    except Exception as exc:
+        logger.warning(f"Could not fetch S&P 500 benchmark data: {exc}")
+        return []
+
+
 def push_portfolio_update(api: "tradeapi.REST"):
     """
     Queries Alpaca for current account state, formats a JSON payload matching
@@ -345,7 +387,8 @@ def push_portfolio_update(api: "tradeapi.REST"):
             "buying_power": str(account.buying_power),
             "status": str(account.status),
             "last_updated": datetime.now(pytz.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "history": history_points
+            "history": history_points,
+            "snp_history": fetch_snp_history(history_points)
         }
         
         # 3. Pull latest changes from remote to avoid push rejections
