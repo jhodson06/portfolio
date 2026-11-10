@@ -79,8 +79,10 @@
         <div style="font-size: 2.8rem; font-weight: 800; color: var(--ink); margin-bottom: 4px;" id="portfolio-equity">
           ...</div>
         <div style="font-size: 1rem; font-weight: 600;" id="portfolio-pl">...</div>
-        <div style="margin-top: 24px; position: relative; flex-grow: 1; min-height: 0; overflow: hidden;">
-          <canvas id="portfolio-chart"></canvas>
+        <div style="margin-top: 24px; flex: 1 1 0; min-height: 0; position: relative;">
+          <div style="position: absolute; inset: 0;">
+            <canvas id="portfolio-chart"></canvas>
+          </div>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
           <div id="portfolio-legend" style="display: flex; gap: 10px;"></div>
