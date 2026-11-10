@@ -17,7 +17,7 @@
     gtag('config', 'G-ZTM6M3TF0B');
   </script>
   <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-    <script defer src="main.js"></script>
+  <script defer src="main.js"></script>
   <link rel="canonical" href="https://jhodson06.github.io/portfolio/orb-algorithm.html">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/png" href="/favicon.png">
@@ -76,14 +76,16 @@
             ACTIVE
           </div>
         </div>
-        <div style="font-size: 2.8rem; font-weight: 800; color: var(--ink); line-height: 1; margin-bottom: 6px;" id="portfolio-equity">
+        <div style="font-size: 2.8rem; font-weight: 800; color: var(--ink); line-height: 1; margin-bottom: 6px;"
+          id="portfolio-equity">
           ...</div>
         <div style="font-size: 1rem; font-weight: 600; line-height: 1.2;" id="portfolio-pl">...</div>
         <div style="flex: 1; width: 100%; position: relative; min-height: 0; margin-top: 14px;">
           <canvas id="portfolio-chart"></canvas>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--muted); margin-top: 10px; line-height: 1;">
-          <div id="portfolio-legend" style="display: flex; gap: 12px; align-items: center; margin-left: 24px;">
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--muted); margin-top: 10px; line-height: 1;">
+          <div id="portfolio-legend" style="display: flex; gap: 12px; align-items: center; margin-left: 18px;">
             <b style="color: var(--accent); font-weight: 600;">My Portfolio</b>
             <b style="color: var(--snp); font-weight: 600;">S&amp;P 500</b>
           </div>
@@ -119,26 +121,34 @@
       <div>
         <div class="photo-placeholder ratio-square"
           style="width: 100%; display: grid; place-items: center; border-radius: var(--radius); background: var(--photo-bg);">
-          <svg viewBox="0 0 400 400" style="width: 100%; height: 100%; max-width: 360px; display: block; margin: 0 auto; font-family: inherit;">
+          <svg viewBox="0 0 400 400"
+            style="width: 100%; height: 100%; max-width: 360px; display: block; margin: 0 auto; font-family: inherit;">
             <!-- Grid Lines -->
             <line x1="60" y1="60" x2="360" y2="60" stroke="var(--line)" stroke-dasharray="4 4" stroke-width="1" />
             <line x1="60" y1="160" x2="360" y2="160" stroke="var(--line)" stroke-dasharray="4 4" stroke-width="1" />
             <line x1="60" y1="260" x2="360" y2="260" stroke="var(--line)" stroke-dasharray="4 4" stroke-width="1" />
-            
+
             <line x1="160" y1="60" x2="160" y2="360" stroke="var(--line)" stroke-dasharray="4 4" stroke-width="1" />
-            
+
             <!-- Opening Range Box (9:30 - 9:45) -->
-            <rect x="60" y="160" width="100" height="100" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 4" />
-            <text x="110" y="210" fill="var(--accent)" font-size="12" font-weight="800" text-anchor="middle" dominant-baseline="middle" style="letter-spacing: 0.05em; text-transform: uppercase;">Opening Range</text>
+            <rect x="60" y="160" width="100" height="100" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)"
+              stroke-width="2" stroke-dasharray="4 4" />
+            <text x="110" y="210" fill="var(--accent)" font-size="12" font-weight="800" text-anchor="middle"
+              dominant-baseline="middle" style="letter-spacing: 0.05em; text-transform: uppercase;">Opening Range</text>
 
             <!-- Y-Axis Labels -->
-            <text x="50" y="60" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="end" dominant-baseline="middle">Take Profit</text>
-            <text x="50" y="160" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="end" dominant-baseline="middle">ORB High</text>
-            <text x="50" y="260" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="end" dominant-baseline="middle">ORB Low</text>
+            <text x="50" y="60" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="end"
+              dominant-baseline="middle">Take Profit</text>
+            <text x="50" y="160" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="end"
+              dominant-baseline="middle">ORB High</text>
+            <text x="50" y="260" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="end"
+              dominant-baseline="middle">ORB Low</text>
 
             <!-- X-Axis Labels -->
-            <text x="60" y="380" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="middle">9:30 AM</text>
-            <text x="160" y="380" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="middle">9:45 AM</text>
+            <text x="60" y="380" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="middle">9:30
+              AM</text>
+            <text x="160" y="380" fill="var(--muted)" font-size="10" font-weight="700" text-anchor="middle">9:45
+              AM</text>
 
             <!-- Take profit and Stop Loss boundary lines -->
             <line x1="160" y1="60" x2="360" y2="60" stroke="var(--accent)" stroke-dasharray="6 4" stroke-width="2" />
@@ -147,20 +157,26 @@
 
             <!-- The Stock Price Line -->
             <!-- Path starts outside box, bounces inside, breaks out at x=160, hits take profit at x=300 -->
-            <path d="M 20 200 Q 40 180, 60 190 T 110 230 T 150 170 L 160 160 L 190 120 L 230 110 L 270 80 L 300 60 L 340 50" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M 20 200 Q 40 180, 60 190 T 110 230 T 150 170 L 160 160 L 190 120 L 230 110 L 270 80 L 300 60 L 340 50"
+              fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
 
             <!-- Breakout Trigger Point -->
             <circle cx="160" cy="160" r="7" fill="var(--accent)" />
             <circle cx="160" cy="160" r="15" fill="var(--accent)" fill-opacity="0.25" />
-            
+
             <!-- Buy Badge -->
-            <rect x="175" y="150" width="85" height="22" rx="4" fill="var(--surface)" stroke="var(--line)" stroke-width="1" />
-            <text x="182" y="165" fill="var(--accent)" font-size="10" font-weight="800" style="letter-spacing: 0.05em;">BUY SIGNAL</text>
+            <rect x="175" y="150" width="85" height="22" rx="4" fill="var(--surface)" stroke="var(--line)"
+              stroke-width="1" />
+            <text x="182" y="165" fill="var(--accent)" font-size="10" font-weight="800"
+              style="letter-spacing: 0.05em;">BUY SIGNAL</text>
 
             <!-- Profit Target Point -->
             <circle cx="300" cy="60" r="6" fill="var(--accent)" />
-            <rect x="310" y="50" width="70" height="22" rx="4" fill="var(--surface)" stroke="var(--line)" stroke-width="1" />
-            <text x="317" y="65" fill="var(--accent)" font-size="10" font-weight="800" style="letter-spacing: 0.05em;">FILLED</text>
+            <rect x="310" y="50" width="70" height="22" rx="4" fill="var(--surface)" stroke="var(--line)"
+              stroke-width="1" />
+            <text x="317" y="65" fill="var(--accent)" font-size="10" font-weight="800"
+              style="letter-spacing: 0.05em;">FILLED</text>
           </svg>
         </div>
       </div>
@@ -264,7 +280,8 @@
             Live Engine Source Code
           </a>
           <p>
-            <strong>Disclaimer:</strong> To protect the proprietary trading logic for live deployment, certain configurations, alpha filters, and infrastructure details have been redacted from the public source code.
+            <strong>Disclaimer:</strong> To protect the proprietary trading logic for live deployment, certain
+            configurations, alpha filters, and infrastructure details have been redacted from the public source code.
           </p>
         </div>
       </div>
@@ -293,14 +310,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
