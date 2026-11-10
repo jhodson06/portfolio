@@ -23,10 +23,14 @@ function setTheme(theme) {
     const gridColor = isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)";
     const textColor = isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)";
     const accentColor = getComputedStyle(root).getPropertyValue("--accent").trim() || "#22c55e";
+    const snpColor = getComputedStyle(root).getPropertyValue("--snp").trim() || (isDark ? "#6ea8fe" : "#2563eb");
 
     window.portfolioChart.data.datasets[0].borderColor = accentColor;
     window.portfolioChart.data.datasets[0].pointBackgroundColor = accentColor;
-    // dataset[1] is the S&P 500 benchmark — keep its color fixed
+    if (window.portfolioChart.data.datasets[1]) {
+      window.portfolioChart.data.datasets[1].borderColor = snpColor;
+      window.portfolioChart.data.datasets[1].pointBackgroundColor = snpColor;
+    }
     window.portfolioChart.options.scales.x.ticks.color = textColor;
     window.portfolioChart.options.scales.y.grid.color = gridColor;
     window.portfolioChart.options.scales.y.ticks.color = textColor;
@@ -264,12 +268,14 @@ if (portfolioWidget) {
       plElement.innerText = `${sign}${equityFormatter.format(change)} (${sign}${changePct.toFixed(2)}%) Today`;
       plElement.style.color = color;
 
-      if (data.last_updated) {
-        const date = new Date(data.last_updated);
-        const timestampElement = document.getElementById("portfolio-timestamp");
-        if (timestampElement) {
-          timestampElement.innerText = `Last updated: ${date.toLocaleString([], {month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'})}`;
+      const timestampElement = document.getElementById("portfolio-timestamp");
+      if (timestampElement) {
+        let timeStr = "";
+        if (data.last_updated) {
+          const date = new Date(data.last_updated);
+          timeStr = `Last updated: ${date.toLocaleString([], {month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'})} &nbsp;•&nbsp; `;
         }
+        timestampElement.innerHTML = `${timeStr}<b style="color: var(--accent); font-weight: 600;">My Portfolio</b> &nbsp; <b style="color: var(--snp); font-weight: 600;">S&amp;P 500</b>`;
       }
 
       portfolioWidget.style.display = "flex";
@@ -282,7 +288,7 @@ if (portfolioWidget) {
         const gridColor = isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)";
         const textColor = isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)";
         const accentColor = getComputedStyle(root).getPropertyValue("--accent").trim() || "#22c55e";
-        const snpColor = "#6ea8fe"; // fixed blue, readable in both themes
+        const snpColor = getComputedStyle(root).getPropertyValue("--snp").trim() || (isDark ? "#6ea8fe" : "#2563eb");
 
         const labels = data.history.map(point => {
           const date = new Date(point.timestamp * 1000);
